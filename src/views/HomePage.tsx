@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
   const getRandomPrompt = useAppStore(state => state.getRandomPrompt);
 
   // Usar animaciones optimizadas
-  const { containerVariants, itemVariants } = useOptimizedAnimations();
+  const { containerVariants, itemVariants, staticVariants, isMobile } = useOptimizedAnimations();
 
   const [timeOfDay, setTimeOfDay] = useState('');
   const [userName] = useState(''); // Puedes agregar funcionalidad de nombre usuario
@@ -126,13 +126,16 @@ const HomePage: React.FC = () => {
   return (
     <div className="homepage-container px-6 lg:px-8 pt-6 lg:pt-8 pb-6 lg:pb-8 max-w-6xl lg:mx-auto">
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        variants={isMobile ? staticVariants : containerVariants}
+        initial={isMobile ? false : "hidden"}
+        animate={isMobile ? false : "visible"}
         className="homepage-content space-y-6 lg:space-y-8"
       >
         {/* Header con saludo personalizado */}
-        <motion.div variants={itemVariants} className="text-center">
+        <motion.div 
+          variants={isMobile ? staticVariants : itemVariants} 
+          className="text-center"
+        >
           <div className="mb-4">
             <h1 className="text-4xl lg:text-6xl font-black mb-2 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 bg-clip-text text-transparent leading-tight">
               Ideas
@@ -148,7 +151,7 @@ const HomePage: React.FC = () => {
 
         {/* Quote del día - más prominente */}
         <motion.div 
-          variants={itemVariants}
+          variants={isMobile ? staticVariants : itemVariants}
           className="bg-gradient-to-r from-slate-700 to-gray-800 rounded-2xl p-6 lg:p-8 text-white shadow-lg min-h-[120px] lg:min-h-[140px]"
           style={{ opacity: dailyQuote ? 1 : 0 }}
         >
@@ -175,7 +178,7 @@ const HomePage: React.FC = () => {
           </motion.div>
 
         {/* Stats Dashboard */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={isMobile ? staticVariants : itemVariants}>
           <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
             <TrendingUp size={20} className="mr-2 text-slate-600" />
             Tu Progreso
@@ -219,7 +222,7 @@ const HomePage: React.FC = () => {
         </motion.div>
 
         {/* Acciones Rápidas */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={isMobile ? staticVariants : itemVariants}>
           <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
             <Zap size={20} className="mr-2 text-gray-600" />
             Acciones Rápidas
@@ -233,8 +236,8 @@ const HomePage: React.FC = () => {
                   key={index}
                   onClick={action.action}
                   className={`bg-gradient-to-br ${action.color} rounded-2xl p-4 lg:p-6 text-white text-left shadow-lg relative overflow-hidden group`}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={isMobile ? {} : { scale: 1.02, y: -2 }}
+                  whileTap={isMobile ? {} : { scale: 0.98 }}
                 >
                   <div className="relative z-10">
                     <Icon size={24} className="mb-3" />
@@ -250,7 +253,7 @@ const HomePage: React.FC = () => {
 
         {/* Actividad Reciente */}
         {getRecentEntries().length > 0 && (
-          <motion.div variants={itemVariants}>
+          <motion.div variants={isMobile ? staticVariants : itemVariants}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-800 flex items-center">
                 <Clock size={20} className="mr-2 text-slate-600" />
@@ -259,7 +262,7 @@ const HomePage: React.FC = () => {
               <motion.button
                 onClick={() => navigate('/diary')}
                 className="text-slate-600 hover:text-slate-700 text-sm font-medium"
-                whileHover={{ scale: 1.05 }}
+                whileHover={isMobile ? {} : { scale: 1.05 }}
               >
                 Ver todo
               </motion.button>
@@ -270,9 +273,9 @@ const HomePage: React.FC = () => {
                 <motion.div
                   key={entry.id}
                   className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200 hover:border-slate-300 transition-colors cursor-pointer"
-                  whileHover={{ scale: 1.01 }}
+                  whileHover={isMobile ? {} : { scale: 1.01 }}
                   onClick={() => navigate('/diary')}
-                  variants={itemVariants}
+                  variants={isMobile ? staticVariants : itemVariants}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -295,7 +298,7 @@ const HomePage: React.FC = () => {
 
         {/* Mensaje motivacional si no hay actividad */}
         {getRecentEntries().length === 0 && (
-          <motion.div variants={itemVariants}>
+          <motion.div variants={isMobile ? staticVariants : itemVariants}>
             <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-6 text-center border border-gray-200">
               <Coffee size={48} className="mx-auto text-slate-600 mb-4" />
               <h3 className="font-semibold text-gray-800 mb-2">
@@ -311,8 +314,8 @@ const HomePage: React.FC = () => {
                   navigate('/write');
                 }}
                 className="bg-slate-600 hover:bg-slate-700 text-white px-6 py-2 rounded-xl font-medium text-sm transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={isMobile ? {} : { scale: 1.05 }}
+                whileTap={isMobile ? {} : { scale: 0.95 }}
               >
                 Escribir mi primera idea
               </motion.button>

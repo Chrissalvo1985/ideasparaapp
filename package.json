@@ -4,7 +4,15 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Una aplicación web moderna para explorar y organizar ideas creativas",
-  "keywords": ["react", "typescript", "vite", "tailwind", "ai", "ideas", "creativity"],
+  "keywords": [
+    "react",
+    "typescript",
+    "vite",
+    "tailwind",
+    "ai",
+    "ideas",
+    "creativity"
+  ],
   "author": "Tu Nombre <tu-email@example.com>",
   "license": "MIT",
   "homepage": "https://tu-usuario.github.io/ideasparaapp",
@@ -53,7 +61,8 @@
     "tailwindcss": "^4.1.10",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vite-plugin-pwa": "^1.0.0"
   },
   "engines": {
     "node": ">=18.0.0",

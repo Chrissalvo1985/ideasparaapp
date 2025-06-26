@@ -2,10 +2,22 @@
 
 /* Custom styles for the app */
 @layer base {
+  html {
+    /* Prevenir cualquier reflow */
+    scroll-behavior: auto; /* NO smooth en móvil */
+    scrollbar-gutter: stable;
+    -webkit-text-size-adjust: 100%; /* Prevenir zoom automático en iOS */
+  }
+  
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevenir movimientos */
+    -webkit-transform: translateZ(0); /* Forzar compositing layer */
+    transform: translateZ(0);
+    /* Estabilizar layout */
+    will-change: auto; /* NO auto en móvil */
   }
   
   /* Prevent horizontal scroll on mobile and flash of scrollbar on desktop */
@@ -13,21 +25,44 @@
     overflow-x: hidden;
   }
   
-  /* Prevent scrollbar flash on initial load */
-  html {
-    scrollbar-gutter: stable;
+  /* MOBILE: Prevenir cualquier reflow/repaint */
+  @media (max-width: 767px) {
+    html {
+      height: 100vh;
+      height: 100dvh; /* Usar dynamic viewport height */
+      scroll-behavior: auto !important; /* Nunca smooth en móvil */
+      -webkit-overflow-scrolling: auto; /* NO touch en iOS */
+    }
+    
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      /* Eliminar cualquier transición */
+      transition: none !important;
+      animation: none !important;
+    }
+    
+    /* Eliminar ALL animations en móvil */
+    *, *::before, *::after {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
   }
   
-  /* Improve mobile viewport */
-  @media (max-width: 1024px) {
+  /* Desktop mantiene animaciones */
+  @media (min-width: 768px) {
     html {
       height: 100vh;
       height: -webkit-fill-available;
+      scrollbar-gutter: stable both-edges;
     }
     
     body {
       min-height: 100vh;
       min-height: -webkit-fill-available;
+      overflow-y: scroll; /* Consistent scrollbar */
     }
   }
 }

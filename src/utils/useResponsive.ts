@@ -75,38 +75,46 @@ export const useResponsive = (): ResponsiveState => {
 export const useOptimizedAnimations = () => {
   const { isMobile } = useResponsive();
   
-  // Variantes sin layout shift para móvil
+  // En móvil: SIN animaciones de entrada para evitar "palpitamiento"
+  // En desktop: animaciones normales
   const containerVariants = {
-    hidden: { opacity: isMobile ? 0 : 0 },
+    hidden: { opacity: isMobile ? 1 : 0 }, // Ya visible en móvil
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: isMobile ? 0.03 : 0.1, // Animaciones más rápidas en móvil
-        delayChildren: isMobile ? 0.01 : 0.05
+        staggerChildren: isMobile ? 0 : 0.1, // Sin stagger en móvil
+        delayChildren: isMobile ? 0 : 0.05   // Sin delay en móvil
       }
     }
   };
 
   const itemVariants = {
     hidden: { 
-      y: isMobile ? 0 : 20, // Sin desplazamiento vertical en móvil
-      opacity: 0 
+      y: isMobile ? 0 : 20,     // Sin movimiento en móvil
+      opacity: isMobile ? 1 : 0  // Ya visible en móvil
     },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        type: isMobile ? "tween" : "spring", // Transiciones más simples en móvil
-        duration: isMobile ? 0.2 : 0.5,
+        type: isMobile ? "tween" : "spring",
+        duration: isMobile ? 0 : 0.5,      // Instantáneo en móvil
         stiffness: 300,
         damping: 24
       }
     }
   };
 
+  // Variant especial para elementos críticos (totalmente sin animación en móvil)
+  const staticVariants = {
+    hidden: { opacity: 1 },
+    visible: { opacity: 1 }
+  };
+
   return {
-    containerVariants,
-    itemVariants,
+    containerVariants: isMobile ? staticVariants : containerVariants,
+    itemVariants: isMobile ? staticVariants : itemVariants,
+    staticVariants,
     isMobile
   };
 };
