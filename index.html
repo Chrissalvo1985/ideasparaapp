@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <!-- Viewport optimizado para eliminar palpitamiento -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <!-- Viewport optimizado para Safari/Edge compatibility -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#475569" />
@@ -26,7 +26,7 @@
     <meta name="description" content="Tu espacio de creatividad infinita - Diario digital inteligente con IA" />
     <meta name="keywords" content="diario, creatividad, escritura, IA, emociones, reflexión" />
     
-    <!-- Optimizaciones de rendimiento AGRESIVAS para móvil -->
+    <!-- Optimizaciones de rendimiento para Safari/Edge -->
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="apple-touch-fullscreen" content="yes" />
@@ -35,17 +35,47 @@
     <title>Ideas para App</title>
     
     <style>
-      /* CRITICAL: Prevenir flash of unstyled content y movimientos */
-      #root {
-        min-height: 100vh;
-        min-height: 100dvh;
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        /* MOBILE: Eliminar cualquier movimento */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
+      /* CRITICAL: Safari/Edge compatible mobile optimizations */
+      :root {
+        --vh: 1vh;
+        --safe-area-inset-top: env(safe-area-inset-top, 0px);
+        --safe-area-inset-right: env(safe-area-inset-right, 0px);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-area-inset-left: env(safe-area-inset-left, 0px);
       }
       
-      /* MOBILE: Optimizaciones ultra-agresivas */
+      /* Initialize viewport height for Safari */
+      html, body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      #root {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        overflow-x: hidden;
+      }
+      
+      /* Safari/Edge Mobile Specific Optimizations */
+      @supports (-webkit-touch-callout: none) {
+        /* iOS Safari specific */
+        #root {
+          min-height: -webkit-fill-available;
+        }
+        
+        body {
+          height: -webkit-fill-available;
+        }
+      }
+      
+      /* Mobile-first approach - NO animations by default */
       @media (max-width: 767px) {
         * {
           -webkit-tap-highlight-color: transparent !important;
@@ -54,14 +84,14 @@
           -moz-user-select: none !important;
           -ms-user-select: none !important;
           user-select: none !important;
-          /* ELIMINAR TODAS las animaciones */
-          animation: none !important;
+          /* CRITICAL: Remove all animations/transitions */
           transition: none !important;
+          animation: none !important;
           transform: none !important;
           will-change: auto !important;
         }
         
-        /* Solo permitir selección en inputs */
+        /* Allow text selection only for inputs */
         input, textarea, [contenteditable] {
           -webkit-user-select: text !important;
           -moz-user-select: text !important;
@@ -69,27 +99,27 @@
           user-select: text !important;
         }
         
-        /* FORZAR compositing layers para elementos críticos */
-        #root, body, html {
-          -webkit-transform: translateZ(0) !important;
-          transform: translateZ(0) !important;
-          backface-visibility: hidden !important;
-          -webkit-backface-visibility: hidden !important;
+        /* Prevent zoom on input focus (Safari) */
+        input, textarea, select {
+          font-size: 16px !important;
         }
         
-        /* Eliminar smooth scrolling en móvil */
+        /* Safari smooth scrolling fix */
         html {
           scroll-behavior: auto !important;
           -webkit-overflow-scrolling: auto !important;
         }
         
-        /* iOS específico: prevenir zoom */
-        input, textarea, select {
-          font-size: 16px !important; /* Prevenir zoom en iOS */
+        /* Force hardware acceleration for key elements */
+        #root, body {
+          -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+          -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
         }
       }
       
-      /* Desktop: mantener interactividad */
+      /* Desktop: Enable animations */
       @media (min-width: 768px) {
         * {
           -webkit-tap-highlight-color: transparent;
@@ -100,7 +130,7 @@
           user-select: none;
         }
         
-        input, textarea {
+        input, textarea, [contenteditable] {
           -webkit-user-select: text;
           -moz-user-select: text;
           -ms-user-select: text;
@@ -111,17 +141,32 @@
           scroll-behavior: smooth;
         }
       }
-      
-      /* iOS safe area - Solo aplicar en móvil */
-      @media (max-width: 767px) {
-        :root {
-          --safe-area-inset-top: env(safe-area-inset-top);
-          --safe-area-inset-right: env(safe-area-inset-right);
-          --safe-area-inset-bottom: env(safe-area-inset-bottom);
-          --safe-area-inset-left: env(safe-area-inset-left);
-        }
-      }
     </style>
+    
+    <script>
+      // Safari viewport height fix
+      function setViewportHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      
+      // Set on load and resize
+      setViewportHeight();
+      window.addEventListener('resize', setViewportHeight);
+      window.addEventListener('orientationchange', () => {
+        setTimeout(setViewportHeight, 100);
+      });
+      
+      // Prevent double-tap zoom on mobile
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+          event.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, false);
+    </script>
   </head>
   <body>
     <div id="root"></div>
