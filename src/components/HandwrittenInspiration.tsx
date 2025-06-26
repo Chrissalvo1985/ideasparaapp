@@ -35,15 +35,16 @@ const HandwrittenInspiration: React.FC<HandwrittenInspirationProps> = ({
         </div>
       </div>
 
-      {/* Texto principal con estilo manuscrito */}
+      {/* Texto principal con estilo manuscrito mejorado para legibilidad */}
       <div className="relative z-10 flex-1 flex flex-col justify-between">
         <blockquote 
-          className="text-slate-700 text-base lg:text-lg leading-relaxed font-normal italic text-center flex-1 flex items-center justify-center"
+          className="text-slate-800 text-base lg:text-lg leading-relaxed font-medium italic text-center flex-1 flex items-center justify-center"
           style={{ 
             fontFamily: '"Kalam", "Dancing Script", cursive',
             lineHeight: '1.7',
-            textShadow: '0 1px 2px rgba(71, 85, 105, 0.1)',
-            transform: 'rotate(-0.2deg)'
+            textShadow: '0 1px 3px rgba(71, 85, 105, 0.15)',
+            transform: 'rotate(-0.2deg)',
+            fontWeight: '500'
           }}
         >
           "{inspiration.text}"
@@ -52,14 +53,15 @@ const HandwrittenInspiration: React.FC<HandwrittenInspirationProps> = ({
         {/* Firma */}
         <div className="flex items-center justify-end mt-4">
           <div 
-            className="text-slate-600 text-sm font-medium"
+            className="text-slate-700 text-sm font-semibold"
             style={{ 
               fontFamily: '"Kalam", "Dancing Script", cursive',
-              transform: 'rotate(-0.3deg)'
+              transform: 'rotate(-0.3deg)',
+              fontWeight: '600'
             }}
           >
             — {inspiration.author}
-            <Heart size={10} className="inline ml-1 text-rose-500/60" />
+            <Heart size={10} className="inline ml-1 text-rose-500/70" />
           </div>
         </div>
       </div>
