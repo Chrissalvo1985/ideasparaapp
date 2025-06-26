@@ -1,0 +1,768 @@
+@import "tailwindcss";
+
+/* Custom styles for the app */
+@layer base {
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Prevent horizontal scroll on mobile and flash of scrollbar on desktop */
+  html, body {
+    overflow-x: hidden;
+  }
+  
+  /* Prevent scrollbar flash on initial load */
+  html {
+    scrollbar-gutter: stable;
+  }
+  
+  /* Improve mobile viewport */
+  @media (max-width: 1024px) {
+    html {
+      height: 100vh;
+      height: -webkit-fill-available;
+    }
+    
+    body {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+    }
+  }
+}
+
+@layer components {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .prose {
+    color: #374151;
+    line-height: 1.7;
+  }
+  
+  .prose-sm {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  /* Category cards with subtle texture */
+  .category-card {
+    position: relative;
+    background: linear-gradient(135deg, 
+      rgba(55, 65, 81, 0.95) 0%, 
+      rgba(75, 85, 99, 0.98) 50%, 
+      rgba(55, 65, 81, 0.95) 100%
+    );
+  }
+
+  /* Override purple colors with sober palette */
+  .border-purple-100 {
+    border-color: rgb(229 231 235) !important; /* gray-200 */
+  }
+  
+  .border-purple-200 {
+    border-color: rgb(209 213 219) !important; /* gray-300 */
+  }
+  
+  .border-purple-300 {
+    border-color: rgb(156 163 175) !important; /* gray-400 */
+  }
+  
+  .bg-purple-50 {
+    background-color: rgb(248 250 252) !important; /* slate-50 */
+  }
+  
+  .bg-purple-100 {
+    background-color: rgb(241 245 249) !important; /* slate-100 */
+  }
+  
+  .bg-purple-500 {
+    background-color: rgb(100 116 139) !important; /* slate-500 */
+  }
+  
+  .bg-purple-600 {
+    background-color: rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .text-purple-600 {
+    color: rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .text-purple-700 {
+    color: rgb(51 65 85) !important; /* slate-700 */
+  }
+  
+  .text-purple-800 {
+    color: rgb(30 41 59) !important; /* slate-800 */
+  }
+  
+  .hover\:text-purple-600:hover {
+    color: rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .hover\:text-purple-700:hover {
+    color: rgb(51 65 85) !important; /* slate-700 */
+  }
+  
+  .focus\:border-purple-300:focus {
+    border-color: rgb(156 163 175) !important; /* gray-400 */
+  }
+}
+
+@layer utilities {
+  .bg-glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .text-shadow {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+  
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  
+  .h-screen-safe {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+  
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* Mobile navigation spacing */
+  .mobile-navigation {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* Improved scrolling on mobile */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* Fix layout issues */
+  .min-h-content {
+    min-height: calc(100vh - 200px);
+  }
+  
+  /* Desktop layout improvements */
+  @media (min-width: 1024px) {
+    html {
+      /* Force scrollbar gutter to prevent flash */
+      scrollbar-gutter: stable both-edges;
+    }
+    
+    body {
+      /* Ensure consistent scrollbar space on desktop */
+      overflow-y: scroll;
+    }
+    
+    .lg-no-scroll {
+      overflow: visible !important;
+      height: auto !important;
+    }
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(100 116 139); /* slate-500 instead of purple */
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(71 85 105); /* slate-600 */
+}
+
+/* Chat messages container */
+.chat-messages-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(100 116 139) transparent;
+}
+
+.chat-messages-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-messages-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-messages-container::-webkit-scrollbar-thumb {
+  background: rgb(100 116 139);
+  border-radius: 2px;
+}
+
+.chat-messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(71 85 105); /* slate-600 instead of purple */
+}
+
+/* Animation for writing focus */
+.writing-focus {
+  animation: breathe 3s infinite ease-in-out;
+}
+
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 20px rgba(100, 116, 139, 0.3); } /* slate-500 */
+  50% { box-shadow: 0 0 40px rgba(100, 116, 139, 0.6); } /* slate-500 */
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Hide scrollbar for emotion grid */
+.emotion-grid {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.emotion-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, rgb(100 116 139), rgb(156 163 175)); /* slate colors */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 2px solid #ffffff;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Focus states */
+.focus-visible:focus {
+  outline: 2px solid rgb(100 116 139); /* slate-500 */
+  outline-offset: 2px;
+}
+
+/* Preserve white space in diary entries */
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+/* Paper Styles for Diary Entries */
+.paper-notebook {
+  background: 
+    linear-gradient(135deg, #fefefe 0%, #fdfdfd 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 23px,
+      rgba(59, 130, 246, 0.05) 24px
+    );
+  border-left: 4px solid #e53e3e;
+  border-radius: 0 12px 12px 0;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  margin: 0;
+  transition: all 0.3s ease;
+  min-height: 240px;
+  height: fit-content;
+}
+
+.paper-notebook:before {
+  content: '';
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 8px, #cbd5e1 8px, #cbd5e1 calc(100% - 8px), transparent calc(100% - 8px));
+  background-size: 1px 24px;
+}
+
+.paper-notebook:after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: 8px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid #f1f5f9;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+.paper-postit {
+  background: linear-gradient(135deg, var(--emotion-color, #fbbf24) 0%, color-mix(in srgb, var(--emotion-color, #fbbf24) 80%, white) 100%);
+  border-radius: 2px 16px 16px 2px;
+  box-shadow: 
+    0 3px 10px rgba(0, 0, 0, 0.15),
+    0 1px 0 rgba(255, 255, 255, 0.4) inset;
+  transform-origin: top left;
+  position: relative;
+  margin: 0;
+  min-height: 240px;
+  height: fit-content;
+  color: #1f2937; /* Texto más oscuro para mejor contraste */
+}
+
+.paper-postit:before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.paper-vintage {
+  background: linear-gradient(135deg, #fef7cd 0%, #fef3c7 50%, #fde68a 100%);
+  border: 1px solid #d97706;
+  border-radius: 4px;
+  box-shadow: 
+    0 6px 20px rgba(217, 119, 6, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  position: relative;
+  margin: 0;
+  min-height: 240px;
+  height: fit-content;
+  color: #92400e; /* Texto marrón oscuro para contraste en fondo amarillo */
+}
+
+.paper-vintage:before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.paper-vintage:after {
+  content: '✦';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: rgba(217, 119, 6, 0.4);
+  font-size: 14px;
+}
+
+.paper-sticky {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  border: 2px dashed #10b981;
+  border-radius: 8px;
+  box-shadow: 
+    0 2px 8px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  position: relative;
+  margin: 0;
+  min-height: 240px;
+  height: fit-content;
+  color: #064e3b; /* Texto verde muy oscuro para contraste en fondo verde claro */
+}
+
+.paper-sticky:before {
+  content: '📌';
+  position: absolute;
+  top: -8px;
+  right: 16px;
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.paper-diary {
+  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.1),
+    0 2px 0 rgba(var(--emotion-color, 100, 116, 139), 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  margin: 0;
+  border-left: 4px solid var(--emotion-color, #64748b);
+  min-height: 240px;
+  height: fit-content;
+}
+
+.paper-diary:before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+}
+
+.paper-diary:after {
+  content: '♡';
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  color: var(--emotion-color, #64748b);
+  opacity: 0.3;
+  font-size: 16px;
+}
+
+/* Hover Effects */
+.paper-notebook:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.paper-postit:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    0 2px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+.paper-vintage:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 35px rgba(217, 119, 6, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.paper-sticky:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 20px rgba(16, 185, 129, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.paper-diary:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.15),
+    0 4px 0 var(--emotion-color, #64748b),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* Active/Expanded States */
+.paper-notebook.expanded,
+.paper-postit.expanded,
+.paper-vintage.expanded,
+.paper-sticky.expanded,
+.paper-diary.expanded {
+  transform: translateY(0) scale(1);
+  z-index: 10;
+}
+
+/* Subtle paper texture overlay */
+.paper-notebook, .paper-postit, .paper-vintage, .paper-sticky, .paper-diary {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px, 60px 60px;
+}
+
+/* Modal specific styles - Opaque versions */
+.paper-notebook.modal-size {
+  min-height: auto;
+  max-height: none;
+  background: 
+    linear-gradient(135deg, #ffffff 0%, #fefefe 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 23px,
+      rgba(59, 130, 246, 0.05) 24px
+    );
+  backdrop-filter: none;
+}
+
+.paper-postit.modal-size {
+  min-height: auto;
+  max-height: none;
+  background: linear-gradient(135deg, var(--emotion-color, #fbbf24) 0%, color-mix(in srgb, var(--emotion-color, #fbbf24) 85%, white) 100%);
+  backdrop-filter: none;
+  color: #1f2937; /* Texto oscuro para modal post-it */
+}
+
+.paper-vintage.modal-size {
+  min-height: auto;
+  max-height: none;
+  background: linear-gradient(135deg, #fef7cd 0%, #fef3c7 50%, #fde68a 100%);
+  backdrop-filter: none;
+  color: #92400e; /* Texto marrón oscuro para modal vintage */
+}
+
+.paper-sticky.modal-size {
+  min-height: auto;
+  max-height: none;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  backdrop-filter: none;
+  color: #064e3b; /* Texto verde oscuro para modal sticky */
+}
+
+/* Mejoras de contraste para elementos internos en papeles de colores */
+.paper-postit .text-gray-600,
+.paper-postit .text-gray-700,
+.paper-postit .text-gray-800 {
+  color: #1f2937 !important; /* Forzar texto oscuro en post-its */
+}
+
+.paper-vintage .text-gray-600,
+.paper-vintage .text-gray-700,
+.paper-vintage .text-gray-800 {
+  color: #92400e !important; /* Forzar texto marrón en vintage */
+}
+
+.paper-sticky .text-gray-600,
+.paper-sticky .text-gray-700,
+.paper-sticky .text-gray-800 {
+  color: #064e3b !important; /* Forzar texto verde oscuro en sticky */
+}
+
+/* Tags con mejor contraste en papeles de colores */
+.paper-postit .bg-slate-100 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #1f2937 !important;
+}
+
+.paper-vintage .bg-slate-100 {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  color: #92400e !important;
+}
+
+.paper-sticky .bg-slate-100 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  color: #064e3b !important;
+}
+
+.paper-diary.modal-size {
+  min-height: auto;
+  max-height: none;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  backdrop-filter: none;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 1024px) {
+  /* Larger touch targets */
+  button, a, input, textarea {
+    min-height: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, textarea, select {
+    font-size: 16px;
+  }
+  
+  /* Improve scrolling performance */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Emotional state colors */
+.emotion-alegria { border-color: #FFD700; background-color: rgba(255, 215, 0, 0.1); }
+.emotion-tristeza { border-color: #4A90E2; background-color: rgba(74, 144, 226, 0.1); }
+.emotion-rabia { border-color: #FF4444; background-color: rgba(255, 68, 68, 0.1); }
+.emotion-nostalgia { border-color: #8B7355; background-color: rgba(139, 115, 85, 0.1); }
+.emotion-vacio { border-color: #808080; background-color: rgba(128, 128, 128, 0.1); }
+.emotion-ansiedad { border-color: #FF8C00; background-color: rgba(255, 140, 0, 0.1); }
+.emotion-paz { border-color: #90EE90; background-color: rgba(144, 238, 144, 0.1); }
+.emotion-confusion { border-color: #DDA0DD; background-color: rgba(221, 160, 221, 0.1); }
+.emotion-gratitud { border-color: #FF69B4; background-color: rgba(255, 105, 180, 0.1); }
+.emotion-miedo { border-color: #8A2BE2; background-color: rgba(138, 43, 226, 0.1); }
+
+:root {
+  --color-1: #333;
+  --color-2: #666;
+  --color-3: #999;
+  --color-4: #fff;
+  --color-5: rgb(100 116 139); /* slate-500 */
+  --color-6: rgb(71 85 105); /* slate-600 */
+}
+
+.font-1 { font-family: Assistant; }
+.font-2 { font-family: Times; }
+.font-3 { font-family: Arial; }
+.font-4 { font-family: SF Pro Text; }
+
+.margin-1 { margin: -1px; }
+.margin-2 { margin: 10px; }
+.margin-3 { margin: 15px; }
+.margin-4 { margin: 1px; }
+.margin-5 { margin: 296px; }
+.margin-6 { margin: 16px; }
+.margin-7 { margin: 5px; }
+.margin-8 { margin: 20px; }
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  /* Prevent scrollbar flash by reserving gutter space */
+  scrollbar-gutter: stable;
+  /* Smooth scroll behavior */
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Prevent layout shift on load by always showing scrollbar space */
+  overflow-y: scroll;
+}
+
+.app-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.app-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-navigation {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 1024px) {
+  body {
+    height: 100vh;
+    height: -webkit-fill-available;
+    overflow: hidden;
+  }
+
+  .app-container {
+    height: 100vh;
+    height: -webkit-fill-available;
+    overflow: hidden;
+  }
+
+  /* Enhanced mobile navigation with better shadow */
+  .mobile-navigation {
+    box-shadow: 0 -10px 25px -5px rgba(0, 0, 0, 0.1), 0 -10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Ensure content has proper bottom spacing */
+  .pb-24 {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0)) !important;
+  }
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Prevent scrollbar flash on HomePage */
+.homepage-container {
+  min-height: 100vh;
+  /* Ensure stable layout on desktop */
+  @media (min-width: 1024px) {
+    min-height: calc(100vh - 2rem);
+  }
+}
+
+/* Ensure consistent layout during animations */
+.homepage-content {
+  /* Reserve space for content to prevent layout shifts */
+  min-height: 80vh;
+  @media (min-width: 1024px) {
+    min-height: 60vh;
+  }
+}

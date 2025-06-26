@@ -1,0 +1,62 @@
+{
+  "name": "ideasparaapp",
+  "private": false,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Una aplicación web moderna para explorar y organizar ideas creativas",
+  "keywords": ["react", "typescript", "vite", "tailwind", "ai", "ideas", "creativity"],
+  "author": "Tu Nombre <tu-email@example.com>",
+  "license": "MIT",
+  "homepage": "https://tu-usuario.github.io/ideasparaapp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/ideasparaapp.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "build:check": "tsc -b && vite build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "test": "echo \"No tests specified\" && exit 0",
+    "server:install": "cd server && npm install",
+    "server:dev": "cd server && npm run dev",
+    "server:start": "cd server && npm start",
+    "dev:full": "concurrently \"npm run dev\" \"npm run server:dev\"",
+    "clean": "rm -rf dist node_modules/.vite"
+  },
+  "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.6.0",
+    "@tailwindcss/postcss": "^4.1.10",
+    "framer-motion": "^12.18.1",
+    "lucide-react": "^0.516.0",
+    "openai": "^4.104.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.10",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
