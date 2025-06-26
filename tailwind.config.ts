@@ -35,20 +35,6 @@ export default {
           900: '#831843',
         }
       },
-      animation: {
-        'breathe': 'breathe 3s infinite ease-in-out',
-        'spin': 'spin 1s linear infinite',
-      },
-      keyframes: {
-        breathe: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(168, 85, 247, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(168, 85, 247, 0.6)' },
-        },
-        spin: {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        }
-      },
       backdropBlur: {
         xs: '2px',
       },

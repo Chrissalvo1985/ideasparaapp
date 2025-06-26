@@ -37,17 +37,6 @@
     body {
       min-height: 100vh;
       min-height: 100dvh;
-      /* Eliminar cualquier transición */
-      transition: none !important;
-      animation: none !important;
-    }
-    
-    /* Eliminar ALL animations en móvil */
-    *, *::before, *::after {
-      animation-duration: 0s !important;
-      animation-delay: 0s !important;
-      transition-duration: 0s !important;
-      transition-delay: 0s !important;
     }
   }
   
@@ -269,11 +258,48 @@
   50% { box-shadow: 0 0 40px rgba(100, 116, 139, 0.6); } /* slate-500 */
 }
 
-/* Smooth transitions */
-* {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+/* CRITICAL: Conditional transitions based on device type */
+/* Mobile: NO transitions/animations by default */
+@media (max-width: 767px) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+  
+  /* Prevenir cualquier flash de transición en la carga inicial */
+  body.mobile-optimized * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  /* Only allow essential animations in mobile */
+  .mobile-allow-transition {
+    transition: opacity 0.15s ease !important;
+  }
+  
+  .mobile-allow-transform {
+    transition: transform 0.15s ease !important;
+  }
+}
+
+/* Desktop: Enable smooth transitions */
+@media (min-width: 768px) {
+  * {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  /* Desktop animation classes */
+  .desktop-animate {
+    transition: all 0.3s ease;
+  }
+  
+  .desktop-animate:hover {
+    transform: translateY(-2px);
+  }
 }
 
 /* Hide scrollbar for emotion grid */
@@ -338,7 +364,6 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   position: relative;
   margin: 0;
-  transition: all 0.3s ease;
   min-height: 240px;
   height: fit-content;
 }
@@ -481,42 +506,48 @@
   font-size: 16px;
 }
 
-/* Hover Effects */
-.paper-notebook:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 30px rgba(0, 0, 0, 0.12),
-    0 4px 8px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
+/* Hover Effects - Only on desktop */
+@media (min-width: 768px) {
+  .paper-notebook {
+    transition: all 0.3s ease;
+  }
+  
+  .paper-notebook:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 30px rgba(0, 0, 0, 0.12),
+      0 4px 8px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
 
-.paper-postit:hover {
-  transform: translateY(-3px);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 2px 0 rgba(255, 255, 255, 0.5) inset;
-}
+  .paper-postit:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+      0 8px 25px rgba(0, 0, 0, 0.2),
+      0 2px 0 rgba(255, 255, 255, 0.5) inset;
+  }
 
-.paper-vintage:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 35px rgba(217, 119, 6, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
+  .paper-vintage:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 35px rgba(217, 119, 6, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
 
-.paper-sticky:hover {
-  transform: translateY(-1px);
-  box-shadow: 
-    0 6px 20px rgba(16, 185, 129, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
+  .paper-sticky:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 6px 20px rgba(16, 185, 129, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
 
-.paper-diary:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.15),
-    0 4px 0 var(--emotion-color, #64748b),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
+  .paper-diary:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 15px 40px rgba(0, 0, 0, 0.15),
+      0 4px 0 var(--emotion-color, #64748b),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
 }
 
 /* Active/Expanded States */

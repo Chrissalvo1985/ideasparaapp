@@ -23,13 +23,31 @@ const debounce = (func: Function, wait: number) => {
 };
 
 export const useResponsive = (): ResponsiveState => {
-  const [state, setState] = useState<ResponsiveState>({
-    isMobile: false,
-    isTablet: false,
-    isDesktop: false,
-    isLandscape: false,
-    viewportHeight: 0,
-    safeAreaBottom: 0,
+  const [state, setState] = useState<ResponsiveState>(() => {
+    // Initialize with current values to prevent hydration mismatch
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isLandscape = width > height;
+      
+      return {
+        isMobile: width < 768,
+        isTablet: width >= 768 && width < 1024,
+        isDesktop: width >= 1024,
+        isLandscape,
+        viewportHeight: height,
+        safeAreaBottom: 0,
+      };
+    }
+    
+    return {
+      isMobile: false,
+      isTablet: false,
+      isDesktop: false,
+      isLandscape: false,
+      viewportHeight: 0,
+      safeAreaBottom: 0,
+    };
   });
 
   const updateState = useCallback(() => {
@@ -57,7 +75,7 @@ export const useResponsive = (): ResponsiveState => {
     updateState();
     
     // Debounce los eventos para evitar renderizados excesivos
-    const debouncedUpdate = debounce(updateState, 150);
+    const debouncedUpdate = debounce(updateState, 100);
     
     window.addEventListener('resize', debouncedUpdate);
     window.addEventListener('orientationchange', debouncedUpdate);
@@ -75,47 +93,43 @@ export const useResponsive = (): ResponsiveState => {
 export const useOptimizedAnimations = () => {
   const { isMobile } = useResponsive();
   
-  // En móvil: SIN animaciones de entrada para evitar "palpitamiento"
-  // En desktop: animaciones normales
+  // NUEVA ESTRATEGIA: CSS maneja las animaciones completamente
+  // Este hook solo determina qué clases aplicar
+  
+  // Para elementos que necesitan animación condicional
+  const getAnimationClasses = (baseClasses: string = '') => {
+    if (isMobile) {
+      // En móvil: clases base sin animaciones
+      return baseClasses;
+    }
+    // En desktop: agregar clases de animación
+    return `${baseClasses} desktop-animate`;
+  };
+
+  // Variantes simplificadas - solo para casos específicos donde se necesite JS
   const containerVariants = {
-    hidden: { opacity: isMobile ? 1 : 0 }, // Ya visible en móvil
-    visible: {
+    hidden: { opacity: 1 }, // Siempre visible para evitar flash
+    visible: { 
       opacity: 1,
-      transition: {
-        staggerChildren: isMobile ? 0 : 0.1, // Sin stagger en móvil
-        delayChildren: isMobile ? 0 : 0.05   // Sin delay en móvil
-      }
+      transition: { duration: 0 } // Sin transición
     }
   };
 
   const itemVariants = {
-    hidden: { 
-      y: isMobile ? 0 : 20,     // Sin movimiento en móvil
-      opacity: isMobile ? 1 : 0  // Ya visible en móvil
-    },
-    visible: {
+    hidden: { opacity: 1, y: 0 }, // Sin movimiento inicial
+    visible: { 
+      opacity: 1, 
       y: 0,
-      opacity: 1,
-      transition: {
-        type: isMobile ? "tween" : "spring",
-        duration: isMobile ? 0 : 0.5,      // Instantáneo en móvil
-        stiffness: 300,
-        damping: 24
-      }
+      transition: { duration: 0 } // Sin transición
     }
   };
 
-  // Variant especial para elementos críticos (totalmente sin animación en móvil)
-  const staticVariants = {
-    hidden: { opacity: 1 },
-    visible: { opacity: 1 }
-  };
-
   return {
-    containerVariants: isMobile ? staticVariants : containerVariants,
-    itemVariants: isMobile ? staticVariants : itemVariants,
-    staticVariants,
-    isMobile
+    containerVariants,
+    itemVariants,
+    staticVariants: containerVariants,
+    isMobile,
+    getAnimationClasses
   };
 };
 
