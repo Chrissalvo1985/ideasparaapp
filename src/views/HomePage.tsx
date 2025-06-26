@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
@@ -16,22 +16,40 @@ import {
   Target,
   Award,
   Coffee,
-  Wind
+  Wind,
+  Feather,
+  ArrowRight,
+  Heart,
+  MessageCircle,
+  Users,
+  BookMarked,
+  Lightbulb
 } from 'lucide-react';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { 
-    dailyQuote, 
-    userProgress, 
-    setDailyQuote,
-    diaryEntries,
-    setCurrentPrompt,
-    getRandomPrompt
-  } = useAppStore();
+  
+  // Usar selectores específicos para evitar re-renders
+  const dailyQuote = useAppStore(state => state.dailyQuote);
+  const diaryEntries = useAppStore(state => state.diaryEntries);
+  const userProgress = useAppStore(state => state.userProgress);
+  const setDailyQuote = useAppStore(state => state.setDailyQuote);
+  const getRandomPrompt = useAppStore(state => state.getRandomPrompt);
 
   const [timeOfDay, setTimeOfDay] = useState('');
   const [userName] = useState(''); // Puedes agregar funcionalidad de nombre usuario
+
+  // Memoizar funciones para evitar re-renders
+  const initializeDailyQuote = useCallback(() => {
+    if (!dailyQuote) {
+      setDailyQuote();
+    }
+  }, [dailyQuote, setDailyQuote]);
+
+  const handleSurpriseMe = useCallback(() => {
+    getRandomPrompt();
+    navigate('/write');
+  }, [getRandomPrompt, navigate]);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -39,10 +57,8 @@ const HomePage: React.FC = () => {
     else if (hour < 18) setTimeOfDay('Buenas tardes');
     else setTimeOfDay('Buenas noches');
 
-    if (!dailyQuote) {
-      setDailyQuote();
-    }
-  }, [dailyQuote, setDailyQuote]);
+    initializeDailyQuote();
+  }, [initializeDailyQuote]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -95,10 +111,7 @@ const HomePage: React.FC = () => {
       description: 'Prompt aleatorio para inspirarte',
       icon: Sparkles,
       color: 'from-stone-600 to-stone-700',
-      action: () => {
-        getRandomPrompt();
-        navigate('/write');
-      }
+      action: handleSurpriseMe
     }
   ];
 
@@ -314,7 +327,7 @@ const HomePage: React.FC = () => {
               </p>
               <motion.button
                 onClick={() => {
-                  setCurrentPrompt(null);
+                  getRandomPrompt();
                   navigate('/write');
                 }}
                 className="bg-slate-600 hover:bg-slate-700 text-white px-6 py-2 rounded-xl font-medium text-sm transition-colors"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 import { Feather, Sparkles, Heart, Lightbulb } from 'lucide-react';
@@ -16,9 +16,13 @@ const loadingPhrases = [
   "Creando tu refugio creativo..."
 ];
 
-const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
+const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
   const [currentPhrase, setCurrentPhrase] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  const handleComplete = useCallback(() => {
+    setTimeout(() => onComplete(), 1000);
+  }, [onComplete]);
 
   useEffect(() => {
     // Cambiar frases más lentamente
@@ -32,7 +36,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           clearInterval(phraseInterval);
-          setTimeout(() => onComplete(), 1000); // Cambió de 500ms a 1000ms
+          handleComplete();
           return 100;
         }
         // Progreso más lento: entre 2-6% cada 300ms
@@ -44,7 +48,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       clearInterval(phraseInterval);
       clearInterval(progressInterval);
     };
-  }, [onComplete]);
+  }, [handleComplete]);
 
   const floatingElements = [
     { icon: Feather, delay: 0, x: '5%', y: '10%' },
@@ -287,6 +291,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       </motion.div>
     </motion.div>
   );
-};
+});
 
 export default LoadingScreen; 

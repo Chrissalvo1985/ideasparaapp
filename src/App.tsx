@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useAppStore } from './stores/appStore';
@@ -24,17 +24,17 @@ import CommunityView from './views/CommunityView';
 import './App.css';
 
 function App() {
-  const { initializeStore } = useAppStore();
+  const initializeStore = useAppStore(state => state.initializeStore);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Inicializar la app
-    initializeStore();
-  }, [initializeStore]);
-
-  const handleLoadingComplete = () => {
+  const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    // Inicializar la app solo una vez
+    initializeStore();
+  }, []); // Dependencia vacía - solo se ejecuta una vez
 
   return (
     <BrowserRouter>

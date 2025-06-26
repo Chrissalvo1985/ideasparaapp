@@ -336,47 +336,45 @@ export const useAppStore = create<AppStore>()(
       },
 
       updateStreakIfNeeded: () => {
-        const current = get();
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
+        const state = get();
+        const today = new Date().toDateString();
         
-        const todayStr = today.toDateString();
-        const yesterdayStr = yesterday.toDateString();
-        const lastActiveDate = current.userProgress.lastActiveDate;
-        
-        if (lastActiveDate === yesterdayStr) {
-          // Continue streak
-          set({
+        if (state.userProgress.lastActiveDate !== today) {
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const wasActiveYesterday = state.userProgress.lastActiveDate === yesterday.toDateString();
+          
+          set(currentState => ({
             userProgress: {
-              ...current.userProgress,
-              consecutiveDays: current.userProgress.consecutiveDays + 1
+              ...currentState.userProgress,
+              consecutiveDays: wasActiveYesterday ? currentState.userProgress.consecutiveDays + 1 : 1,
+              lastActiveDate: today
             }
-          });
-        } else if (lastActiveDate !== todayStr) {
-          // Reset streak if there's a gap
-          set({
-            userProgress: {
-              ...current.userProgress,
-              consecutiveDays: 1
-            }
-          });
+          }));
         }
       },
 
       initializeStore: () => {
-        const { setDailyQuote } = get();
+        const state = get();
         
-        // Inicializar datos de prueba si es la primera vez
-        const mockDataLoaded = initializeMockData();
-        if (mockDataLoaded) {
-          console.log('🎭 Datos de prueba cargados en la primera inicialización');
-          // Recargar el store desde localStorage para obtener los datos mock
-          window.location.reload();
-          return;
+        // Solo inicializar si no hay datos
+        if (state.diaryEntries.length === 0 && state.communityPosts.length === 0) {
+          console.log('🚀 Inicializando store por primera vez...');
+          initializeMockData();
+          
+          // Cargar datos de mock en el store
+          const mockData = initializeMockData();
+          
+          set({
+            communityPosts: mockData.posts,
+            currentUser: mockData.users[0] // Usuario por defecto
+          });
+          
+          // Configurar quote diario si no existe
+          if (!state.dailyQuote) {
+            get().setDailyQuote();
+          }
         }
-        
-        setDailyQuote();
       },
 
       // ConciencIA Actions
