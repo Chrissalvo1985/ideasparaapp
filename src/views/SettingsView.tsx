@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { loadMockData } from '../data/mockData';
+import { useOptimizedAnimations } from '../utils/useResponsive';
+import { useAppStore } from '../stores/appStore';
 import { 
   ArrowLeft, 
   Palette,
@@ -12,9 +14,25 @@ import {
   Star,
   Clock,
   Database,
-  Brain
-  } from 'lucide-react';
-import { useAppStore } from '../stores/appStore';
+  Brain,
+  Settings,
+  Volume2,
+  Download,
+  Upload,
+  Trash2,
+  User,
+  Eye,
+  EyeOff,
+  FileText,
+  Share2,
+  Lock,
+  Unlock,
+  Bot,
+  Zap,
+  MessageCircle,
+  Heart,
+  Sparkles
+} from 'lucide-react';
 
 const SettingsView: React.FC = () => {
   const navigate = useNavigate();
@@ -23,28 +41,11 @@ const SettingsView: React.FC = () => {
   
   const { concienciaSettings, updateConcienciaSettings } = useAppStore();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+  // Usar animaciones optimizadas
+  const { containerVariants, itemVariants } = useOptimizedAnimations();
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 24
-      }
-    }
-  };
+  const [activeTab, setActiveTab] = useState<'general' | 'privacy' | 'data' | 'consciencia'>('general');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="px-6 lg:px-8 pt-6 lg:pt-8 pb-6 lg:pb-8 max-w-4xl lg:mx-auto h-full overflow-y-auto smooth-scroll">

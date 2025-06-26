@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -8,18 +8,29 @@ import {
   Sparkles, 
   BookOpen,
   Filter,
-  Quote
+  Quote,
+  Shuffle
 } from 'lucide-react';
 import { getAllInspirations, getInspirationsByCategory, getInspirationsByType } from '../data/inspirations';
 import type { Inspiration } from '../data/inspirations';
 import { categories } from '../data/categories';
 import HandwrittenInspiration from '../components/HandwrittenInspiration';
+import { useOptimizedAnimations } from '../utils/useResponsive';
+import { dailyQuotes } from '../data/quotes';
+import { inspirations } from '../data/inspirations';
 
 const InspirationView: React.FC = () => {
   const navigate = useNavigate();
+  const { containerVariants, itemVariants } = useOptimizedAnimations();
+
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'category' | 'type'>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedType, setSelectedType] = useState<string>('');
+  const [currentQuote, setCurrentQuote] = useState(dailyQuotes[0]);
+  const [currentInspiration, setCurrentInspiration] = useState(inspirations[0]);
+  const [activeTab, setActiveTab] = useState<'quotes' | 'inspirations'>('quotes');
+  const [favoriteQuotes, setFavoriteQuotes] = useState<string[]>([]);
+  const [favoriteInspirations, setFavoriteInspirations] = useState<string[]>([]);
 
   const allInspirations = getAllInspirations();
 
@@ -33,27 +44,14 @@ const InspirationView: React.FC = () => {
     return allInspirations;
   }, [selectedFilter, selectedCategory, selectedType, allInspirations]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+  const getRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * dailyQuotes.length);
+    setCurrentQuote(dailyQuotes[randomIndex]);
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 24
-      }
-    }
+  const getRandomInspiration = () => {
+    const randomIndex = Math.floor(Math.random() * inspirations.length);
+    setCurrentInspiration(inspirations[randomIndex]);
   };
 
   const typeLabels = {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
+import { useOptimizedAnimations } from '../utils/useResponsive';
 import { emotions } from '../data/emotions';
 import { writingPrompts } from '../data/prompts';
 import { ArrowLeft, Edit3, Shuffle, Sparkles } from 'lucide-react';
@@ -10,6 +11,9 @@ const EmotionExplorer: React.FC = () => {
   const navigate = useNavigate();
   const { setCurrentEmotion, setCurrentPrompt, getRandomPrompt } = useAppStore();
   const [selectedEmotion, setSelectedEmotion] = useState<string | null>(null);
+
+  // Usar animaciones optimizadas
+  const { containerVariants, itemVariants } = useOptimizedAnimations();
 
   const selectedEmotionData = emotions.find(e => e.id === selectedEmotion);
   const emotionPrompts = writingPrompts.filter(p => p.emotion === selectedEmotion);
@@ -25,23 +29,11 @@ const EmotionExplorer: React.FC = () => {
   };
 
   const handleRandomPrompt = () => {
-    if (selectedEmotion) {
-      getRandomPrompt(selectedEmotion);
+    const randomPrompt = getRandomPrompt();
+    if (randomPrompt) {
+      setCurrentPrompt(randomPrompt);
       navigate('/write');
     }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
   };
 
   return (

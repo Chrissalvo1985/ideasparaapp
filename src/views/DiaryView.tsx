@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
+import { useOptimizedAnimations } from '../utils/useResponsive';
 import { emotions } from '../data/emotions';
 import { 
   ArrowLeft, 
@@ -15,6 +16,7 @@ import {
   Trash2,
   Plus
 } from 'lucide-react';
+import type { DiaryEntry } from '../types';
 
 const DiaryView: React.FC = () => {
   const navigate = useNavigate();
@@ -26,17 +28,24 @@ const DiaryView: React.FC = () => {
     showPrivateEntries, 
     togglePrivateEntries,
     deleteEntry,
-    setCurrentPrompt
+    setCurrentPrompt,
+    updateEntry
   } = useAppStore();
+
+  // Usar animaciones optimizadas
+  const { containerVariants, itemVariants } = useOptimizedAnimations();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEmotion, setSelectedEmotion] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedEntryType, setSelectedEntryType] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'emotion' | 'category'>('date');
-  const [selectedEntry, setSelectedEntry] = useState<any>(null);
+  const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [modalPaperStyle, setModalPaperStyle] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<DiaryEntry | null>(null);
+  const [editedContent, setEditedContent] = useState('');
+  const [editedTitle, setEditedTitle] = useState('');
 
   // Auto-abrir entrada destacada si viene del chat
   useEffect(() => {
@@ -58,26 +67,18 @@ const DiaryView: React.FC = () => {
     }
   }, [highlightEntryId, diaryEntries]);
 
+  // Unique emotions from entries
+  const uniqueEmotions = [...new Set(diaryEntries.map(entry => entry.emotion))];
+
   // Filter entries
-  const filteredEntries = diaryEntries
-    .filter(entry => {
-      if (!showPrivateEntries && entry.isPrivate) return false;
-      if (searchTerm && !entry.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
-          !entry.content.toLowerCase().includes(searchTerm.toLowerCase())) return false;
-      if (selectedEmotion && entry.emotion !== selectedEmotion) return false;
-      if (selectedCategory && entry.category !== selectedCategory) return false;
-      if (selectedEntryType && entry.entryType !== selectedEntryType) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      if (sortBy === 'date') {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      } else if (sortBy === 'emotion') {
-        return a.emotion.localeCompare(b.emotion);
-      } else {
-        return (a.category || '').localeCompare(b.category || '');
-      }
-    });
+  const filteredEntries = diaryEntries.filter(entry => {
+    const matchesSearch = entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         entry.content.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesEmotion = !selectedEmotion || entry.emotion === selectedEmotion;
+    const matchesPrivacy = showPrivateEntries || !entry.isPrivate;
+    
+    return matchesSearch && matchesEmotion && matchesPrivacy;
+  });
 
   const handleNewEntry = () => {
     setCurrentPrompt(null);
@@ -107,19 +108,6 @@ const DiaryView: React.FC = () => {
     setShowModal(false);
     setSelectedEntry(null);
     setModalPaperStyle('');
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
   };
 
   return (

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
+import { useOptimizedAnimations } from '../utils/useResponsive';
 import { 
   Sparkles, 
   Edit3,
@@ -36,6 +37,9 @@ const HomePage: React.FC = () => {
   const setDailyQuote = useAppStore(state => state.setDailyQuote);
   const getRandomPrompt = useAppStore(state => state.getRandomPrompt);
 
+  // Usar animaciones optimizadas
+  const { containerVariants, itemVariants } = useOptimizedAnimations();
+
   const [timeOfDay, setTimeOfDay] = useState('');
   const [userName] = useState(''); // Puedes agregar funcionalidad de nombre usuario
 
@@ -59,30 +63,6 @@ const HomePage: React.FC = () => {
 
     initializeDailyQuote();
   }, [initializeDailyQuote]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.05
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 24
-      }
-    }
-  };
 
   const quickActions = [
     {

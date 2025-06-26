@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
+import { useOptimizedAnimations } from '../utils/useResponsive';
 import { getCategoryById, getCategoryPrompts, getActiveCategories } from '../data/categories';
 import { 
   ArrowLeft, 
@@ -11,7 +12,19 @@ import {
   Lightbulb,
   Target,
   Sparkles,
-  Compass
+  Compass,
+  BookOpen,
+  Heart,
+  Wind,
+  Coffee,
+  Moon,
+  Sun,
+  Feather,
+  Palette,
+  Music,
+  Camera,
+  Book,
+  Zap
 } from 'lucide-react';
 
 const ExploreView: React.FC = () => {
@@ -20,8 +33,12 @@ const ExploreView: React.FC = () => {
     currentCategory, 
     setCurrentPrompt,
     setCurrentCategory,
-    getRandomPrompt 
+    getRandomPrompt,
+    categoryProgress
   } = useAppStore();
+  
+  // Usar animaciones optimizadas
+  const { containerVariants, itemVariants } = useOptimizedAnimations();
 
   // Limpiar categoría al entrar a explore desde otras vistas
   useEffect(() => {
@@ -33,6 +50,8 @@ const ExploreView: React.FC = () => {
   }, [setCurrentCategory]);
 
   const [selectedPrompt, setSelectedPrompt] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showAllCategories, setShowAllCategories] = useState(false);
   const category = currentCategory ? getCategoryById(currentCategory) : null;
   const prompts = currentCategory ? getCategoryPrompts(currentCategory) : [];
 
@@ -40,35 +59,20 @@ const ExploreView: React.FC = () => {
     setCurrentCategory(categoryId);
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+  // Colores específicos para cada categoría
+  const getCategoryColor = (categoryId: string) => {
+    const colors: Record<string, string> = {
+      'personal': 'from-purple-500 to-pink-500',
+      'creative': 'from-blue-500 to-cyan-500', 
+      'philosophical': 'from-indigo-500 to-purple-500',
+      'memories': 'from-amber-500 to-orange-500',
+      'dreams': 'from-violet-500 to-purple-500',
+      'gratitude': 'from-green-500 to-emerald-500',
+      'challenges': 'from-red-500 to-pink-500',
+      'future': 'from-cyan-500 to-blue-500'
+    };
+    return colors[categoryId] || 'from-gray-500 to-slate-500';
   };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 24
-      }
-    }
-  };
-
-  // No redirigir automáticamente, mostrar selector de categorías
-  // useEffect(() => {
-  //   if (!currentCategory) {
-  //     navigate('/');
-  //   }
-  // }, [currentCategory, navigate]);
 
   // Si no hay categoría seleccionada, mostrar selector
   if (!currentCategory || currentCategory === '') {
@@ -208,12 +212,12 @@ const ExploreView: React.FC = () => {
 
   return (
     <div className="px-4 lg:px-8 pt-4 lg:pt-8 pb-16 lg:pb-8 max-w-4xl lg:mx-auto">
-              <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-4 lg:space-y-6"
-        >
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="space-y-4 lg:space-y-6"
+      >
         {/* Header */}
         <motion.div variants={itemVariants}>
           <div className="flex items-center space-x-4 mb-4">

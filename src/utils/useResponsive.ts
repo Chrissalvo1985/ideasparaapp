@@ -71,4 +71,44 @@ export const useResponsive = (): ResponsiveState => {
   return state;
 };
 
+// Hook para animaciones optimizadas según dispositivo
+export const useOptimizedAnimations = () => {
+  const { isMobile } = useResponsive();
+  
+  // Variantes sin layout shift para móvil
+  const containerVariants = {
+    hidden: { opacity: isMobile ? 0 : 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: isMobile ? 0.03 : 0.1, // Animaciones más rápidas en móvil
+        delayChildren: isMobile ? 0.01 : 0.05
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { 
+      y: isMobile ? 0 : 20, // Sin desplazamiento vertical en móvil
+      opacity: 0 
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: isMobile ? "tween" : "spring", // Transiciones más simples en móvil
+        duration: isMobile ? 0.2 : 0.5,
+        stiffness: 300,
+        damping: 24
+      }
+    }
+  };
+
+  return {
+    containerVariants,
+    itemVariants,
+    isMobile
+  };
+};
+
 export default useResponsive; 
