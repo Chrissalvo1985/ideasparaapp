@@ -106,10 +106,20 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex justify-center mb-12"
+            className="flex justify-center mb-8"
           >
             <Logo size="xl" showText={false} variant="default" />
           </motion.div>
+
+          {/* Subtítulo elegante */}
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="text-xl lg:text-2xl font-light tracking-wide text-slate-600 mb-8"
+          >
+            Tu espacio de creatividad infinita
+          </motion.p>
 
           {/* Estados de carga elegantes */}
           <motion.div
