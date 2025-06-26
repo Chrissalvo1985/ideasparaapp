@@ -61,13 +61,32 @@ const MessageContent = React.memo<{ content: string; onNavigateToEntry: (entryId
     return parts.length > 0 ? parts : [{ type: 'text', content }];
   }, [content, diaryEntries, liberationSessions]);
 
+  const getEntryDisplayText = (entry: any) => {
+    if (!entry) return 'Ver entrada';
+    
+    // Si es DiaryEntry y tiene title
+    if ('title' in entry && entry.title) {
+      const title = String(entry.title);
+      return title.length > 20 ? title.substring(0, 20) + '...' : title;
+    }
+    
+    // Fallback to emotion or default
+    return entry.emotion || 'Entrada';
+  };
+
+  const getEntryTitle = (entry: any) => {
+    if (!entry) return '';
+    return ('title' in entry && entry.title) ? String(entry.title) : '';
+  };
+
   return (
     <div className="whitespace-pre-wrap leading-relaxed word-break break-words">
       {processedContent.map((part, index) => {
         if (part.type === 'reference') {
           const entry = part.entry;
-          const entryTitle = entry && 'title' in entry ? entry.title : undefined;
+          const entryTitle = getEntryTitle(entry);
           const entryEmotion = entry?.emotion || 'Entrada';
+          const displayText = getEntryDisplayText(entry);
           
           return (
             <button
@@ -77,13 +96,7 @@ const MessageContent = React.memo<{ content: string; onNavigateToEntry: (entryId
               title={entry ? `"${entryTitle || entryEmotion}" - ${new Date(entry.date).toLocaleDateString()}` : "Ver entrada referenciada"}
             >
               <ExternalLink size={12} className="mr-1" />
-              {entry ? (
-                <span>
-                  {entryTitle ? entryTitle.substring(0, 20) + (entryTitle.length > 20 ? '...' : '') : entryEmotion}
-                </span>
-              ) : (
-                <span>Ver entrada</span>
-              )}
+              <span>{displayText}</span>
               
               {/* Tooltip mejorado */}
               {entry && (
