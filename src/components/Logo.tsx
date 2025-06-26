@@ -9,10 +9,10 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, variant = 'default' }) => {
   const sizeClasses = {
-    sm: { text: 'text-sm', image: 'w-12 h-12', container: 'w-12 h-12' },
-    md: { text: 'text-lg', image: 'w-16 h-16', container: 'w-16 h-16' },
-    lg: { text: 'text-xl', image: 'w-20 h-20', container: 'w-20 h-20' },
-    xl: { text: 'text-2xl', image: 'w-24 h-24', container: 'w-24 h-24' }
+    sm: { text: 'text-sm', image: 'w-16 h-12', container: 'w-16 h-12' },
+    md: { text: 'text-lg', image: 'w-20 h-16', container: 'w-20 h-16' },
+    lg: { text: 'text-xl', image: 'w-24 h-20', container: 'w-24 h-20' },
+    xl: { text: 'text-2xl', image: 'w-32 h-24', container: 'w-32 h-24' }
   };
 
   const currentSize = sizeClasses[size];
@@ -30,7 +30,7 @@ const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, variant = 'de
         <motion.img
           src="/logo.jpeg"
           alt="Ideas para... Logo"
-          className={`${currentSize.image} rounded-full object-cover shadow-lg`}
+          className={`${currentSize.image} rounded-xl object-cover shadow-lg`}
           animate={isLoading ? {
             rotate: [0, 360],
             scale: [1, 1.05, 1]
@@ -47,7 +47,7 @@ const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true, variant = 'de
         {/* Brillo adicional para loading */}
         {isLoading && (
           <motion.div
-            className="absolute inset-0 rounded-full border-2 border-slate-400"
+            className="absolute inset-0 rounded-xl border-2 border-slate-400"
             animate={{
               scale: [1, 1.4, 1],
               opacity: [0, 0.5, 0]

@@ -101,79 +101,14 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
         {/* Contenido principal centrado */}
         <div className="flex flex-col items-center justify-center space-y-12">
           
-          {/* Marca principal - Lo más importante */}
+          {/* Logo estático elegante */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 1 }}
-            className="text-center space-y-6 relative z-10"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="flex justify-center mb-12"
           >
-            {/* Logo sutil arriba */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="flex justify-center mb-4"
-            >
-              <div className="opacity-40 scale-75">
-                <Logo size="md" showText={false} variant="loading" />
-              </div>
-            </motion.div>
-
-            {/* Título principal - DESTACADO */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="text-center"
-            >
-              <h1 className="text-6xl lg:text-8xl font-bold tracking-tight leading-none">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.0, duration: 0.6 }}
-                  className="text-gray-800"
-                  style={{ 
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                    fontWeight: 800,
-                    letterSpacing: '-0.02em'
-                  }}
-                >
-                  Ideas
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.2, duration: 0.6 }}
-                  className="text-gray-600 -mt-2"
-                  style={{ 
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                    fontWeight: 300,
-                    letterSpacing: '-0.01em'
-                  }}
-                >
-                  para
-                </motion.div>
-              </h1>
-            </motion.div>
-
-            {/* Subtítulo elegante */}
-            <motion.p 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-              className="text-xl lg:text-2xl font-light tracking-wide text-slate-600"
-            >
-              Tu espacio de creatividad infinita
-            </motion.p>
-
-            {/* Línea decorativa sutil */}
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: '100px' }}
-              transition={{ delay: 1.5, duration: 0.8 }}
-              className="h-px bg-gradient-to-r from-transparent via-slate-400 to-transparent mx-auto"
-            />
+            <Logo size="xl" showText={false} variant="default" />
           </motion.div>
 
           {/* Estados de carga elegantes */}
