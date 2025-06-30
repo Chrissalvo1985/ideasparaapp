@@ -2,6 +2,27 @@
 
 /* Custom styles for the app */
 @layer base {
+  :root {
+    /* Light mode colors */
+    --color-bg-primary: 255 255 255;
+    --color-bg-secondary: 248 250 252;
+    --color-text-primary: 15 23 42;
+    --color-text-secondary: 71 85 105;
+    --color-border: 226 232 240;
+    --color-glass: rgba(255, 255, 255, 0.7);
+  }
+
+  .dark {
+    /* Dark mode colors */
+    --color-bg-primary: 15 23 42;
+    --color-bg-secondary: 30 41 59;
+    --color-text-primary: 248 250 252;
+    --color-text-secondary: 203 213 225;
+    --color-border: 51 65 85;
+    --color-glass: rgba(30, 41, 59, 0.7);
+  }
+
+
   html {
     /* Safari/Edge mobile optimizations */
     scroll-behavior: auto;
@@ -80,25 +101,45 @@
     );
   }
 
-  /* Override purple colors with sober palette */
+  /* Override purple colors with sober palette for both light and dark modes */
   .border-purple-100 {
     border-color: rgb(229 231 235) !important; /* gray-200 */
+  }
+  
+  .dark .border-purple-100 {
+    border-color: rgb(71 85 105) !important; /* slate-600 */
   }
   
   .border-purple-200 {
     border-color: rgb(209 213 219) !important; /* gray-300 */
   }
   
+  .dark .border-purple-200 {
+    border-color: rgb(51 65 85) !important; /* slate-700 */
+  }
+  
   .border-purple-300 {
     border-color: rgb(156 163 175) !important; /* gray-400 */
+  }
+  
+  .dark .border-purple-300 {
+    border-color: rgb(30 41 59) !important; /* slate-800 */
   }
   
   .bg-purple-50 {
     background-color: rgb(248 250 252) !important; /* slate-50 */
   }
   
+  .dark .bg-purple-50 {
+    background-color: rgb(30 41 59) !important; /* slate-800 */
+  }
+  
   .bg-purple-100 {
     background-color: rgb(241 245 249) !important; /* slate-100 */
+  }
+  
+  .dark .bg-purple-100 {
+    background-color: rgb(51 65 85) !important; /* slate-700 */
   }
   
   .bg-purple-500 {
@@ -113,32 +154,60 @@
     color: rgb(71 85 105) !important; /* slate-600 */
   }
   
+  .dark .text-purple-600 {
+    color: rgb(148 163 184) !important; /* slate-400 */
+  }
+  
   .text-purple-700 {
     color: rgb(51 65 85) !important; /* slate-700 */
+  }
+  
+  .dark .text-purple-700 {
+    color: rgb(203 213 225) !important; /* slate-300 */
   }
   
   .text-purple-800 {
     color: rgb(30 41 59) !important; /* slate-800 */
   }
   
+  .dark .text-purple-800 {
+    color: rgb(226 232 240) !important; /* slate-200 */
+  }
+  
   .hover\:text-purple-600:hover {
     color: rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .dark .hover\:text-purple-600:hover {
+    color: rgb(148 163 184) !important; /* slate-400 */
   }
   
   .hover\:text-purple-700:hover {
     color: rgb(51 65 85) !important; /* slate-700 */
   }
   
+  .dark .hover\:text-purple-700:hover {
+    color: rgb(203 213 225) !important; /* slate-300 */
+  }
+  
   .focus\:border-purple-300:focus {
     border-color: rgb(156 163 175) !important; /* gray-400 */
+  }
+  
+  .dark .focus\:border-purple-300:focus {
+    border-color: rgb(30 41 59) !important; /* slate-800 */
   }
 }
 
 @layer utilities {
   .bg-glass {
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--color-glass);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .dark .bg-glass {
+    border: 1px solid rgba(51, 65, 85, 0.3);
   }
   
   .text-shadow {
@@ -406,13 +475,25 @@
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: rgb(51 65 85);
+}
+
 ::-webkit-scrollbar-thumb {
   background: rgb(100 116 139);
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: rgb(148 163 184);
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(71 85 105);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgb(203 213 225);
 }
 
 /* Chat messages container */
@@ -537,91 +618,7 @@
   white-space: pre-wrap;
 }
 
-/* Paper Styles - Simplified for mobile performance */
-.paper-notebook {
-  background: linear-gradient(135deg, #fefefe 0%, #fdfdfd 100%);
-  border-left: 4px solid #e53e3e;
-  border-radius: 0 12px 12px 0;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
-  position: relative;
-  margin: 0;
-  min-height: 240px;
-  height: fit-content;
-}
 
-.paper-postit {
-  background: linear-gradient(135deg, var(--emotion-color, #fbbf24) 0%, color-mix(in srgb, var(--emotion-color, #fbbf24) 80%, white) 100%);
-  border-radius: 2px 16px 16px 2px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  position: relative;
-  margin: 0;
-  min-height: 240px;
-  height: fit-content;
-  color: #1f2937;
-}
-
-.paper-vintage {
-  background: linear-gradient(135deg, #fef7cd 0%, #fef3c7 50%, #fde68a 100%);
-  border: 1px solid #d97706;
-  border-radius: 4px;
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.2);
-  position: relative;
-  margin: 0;
-  min-height: 240px;
-  height: fit-content;
-  color: #92400e;
-}
-
-.paper-sticky {
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-  border: 2px dashed #10b981;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
-  position: relative;
-  margin: 0;
-  min-height: 240px;
-  height: fit-content;
-  color: #064e3b;
-}
-
-.paper-diary {
-  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  position: relative;
-  margin: 0;
-  border-left: 4px solid var(--emotion-color, #64748b);
-  min-height: 240px;
-  height: fit-content;
-}
-
-/* Hover Effects - Desktop only */
-@media (min-width: 768px) {
-  .paper-notebook:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  .paper-postit:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  }
-
-  .paper-vintage:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 35px rgba(217, 119, 6, 0.25);
-  }
-
-  .paper-sticky:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
-  }
-
-  .paper-diary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-  }
-}
 
 /* Mobile touch improvements */
 @media (max-width: 1024px) {
@@ -638,6 +635,29 @@
   }
 }
 
+/* Inspiración cards - optimizadas para legibilidad móvil */
+.inspiration-text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.inspiration-author {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Desktop: mantener estilo manuscrito pero mejorado */
+@media (min-width: 1024px) {
+  .inspiration-text {
+    font-family: "Kalam", "Dancing Script", cursive;
+    transform: rotate(-0.2deg);
+    font-style: italic;
+  }
+  
+  .inspiration-author {
+    font-family: "Kalam", "Dancing Script", cursive;
+    transform: rotate(-0.3deg);
+  }
+}
+
 /* Emotional state colors */
 .emotion-alegria { border-color: #FFD700; background-color: rgba(255, 215, 0, 0.1); }
 .emotion-tristeza { border-color: #4A90E2; background-color: rgba(74, 144, 226, 0.1); }
@@ -649,6 +669,18 @@
 .emotion-confusion { border-color: #DDA0DD; background-color: rgba(221, 160, 221, 0.1); }
 .emotion-gratitud { border-color: #FF69B4; background-color: rgba(255, 105, 180, 0.1); }
 .emotion-miedo { border-color: #8A2BE2; background-color: rgba(138, 43, 226, 0.1); }
+
+/* Dark mode emotion styles with enhanced opacity */
+.dark .emotion-alegria { background-color: rgba(255, 215, 0, 0.2); }
+.dark .emotion-tristeza { background-color: rgba(74, 144, 226, 0.2); }
+.dark .emotion-rabia { background-color: rgba(255, 68, 68, 0.2); }
+.dark .emotion-nostalgia { background-color: rgba(139, 115, 85, 0.2); }
+.dark .emotion-vacio { background-color: rgba(128, 128, 128, 0.2); }
+.dark .emotion-ansiedad { background-color: rgba(255, 140, 0, 0.2); }
+.dark .emotion-paz { background-color: rgba(144, 238, 144, 0.2); }
+.dark .emotion-confusion { background-color: rgba(221, 160, 221, 0.2); }
+.dark .emotion-gratitud { background-color: rgba(255, 105, 180, 0.2); }
+.dark .emotion-miedo { background-color: rgba(138, 43, 226, 0.2); }
 
 /* Legacy support */
 button, a {

@@ -10,8 +10,6 @@ import {
   Filter, 
   Eye,
   EyeOff,
-  Calendar,
-  Heart,
   Edit3,
   Trash2,
   Plus
@@ -29,7 +27,8 @@ const DiaryView: React.FC = () => {
     togglePrivateEntries,
     deleteEntry,
     setCurrentPrompt,
-    updateEntry
+    updateEntry,
+    isDarkMode
   } = useAppStore();
 
   // Usar animaciones optimizadas
@@ -37,9 +36,6 @@ const DiaryView: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEmotion, setSelectedEmotion] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedEntryType, setSelectedEntryType] = useState('');
-  const [sortBy, setSortBy] = useState<'date' | 'emotion' | 'category'>('date');
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [modalPaperStyle, setModalPaperStyle] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
@@ -59,7 +55,7 @@ const DiaryView: React.FC = () => {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             // Auto-abrir el modal después de un pequeño delay
             setTimeout(() => {
-              openModal(entryToHighlight, 'bg-purple-50 border-purple-200');
+              openModal(entryToHighlight, entryToHighlight.isPrivate ? 'private' : 'public');
             }, 500);
           }
         }, 100);
@@ -123,15 +119,15 @@ const DiaryView: React.FC = () => {
           <div className="flex items-center space-x-4">
             <motion.button
               onClick={() => navigate(-1)}
-              className="p-2 rounded-full bg-white/60 backdrop-blur-sm border border-slate-200"
+              className="p-2 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200 dark:border-slate-600"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <ArrowLeft size={20} className="text-slate-600" />
+              <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
             </motion.button>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Mis Ideas</h1>
-              <p className="text-sm text-gray-600">
+              <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200">Mis Ideas</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 {filteredEntries.length} entradas encontradas
               </p>
             </div>
@@ -139,7 +135,7 @@ const DiaryView: React.FC = () => {
           
           <motion.button
             onClick={handleNewEntry}
-            className="p-2 rounded-full bg-slate-600 text-white"
+            className="p-2 rounded-full bg-slate-600 dark:bg-slate-700 text-white hover:bg-slate-700 dark:hover:bg-slate-600"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -151,13 +147,13 @@ const DiaryView: React.FC = () => {
         <motion.div variants={itemVariants} className="space-y-4">
           {/* Search */}
           <div className="relative">
-            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
             <input
               type="text"
               placeholder="Buscar en tus entradas..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl focus:outline-none focus:border-slate-400"
+              className="w-full pl-10 pr-4 py-3 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-slate-400 dark:focus:border-slate-500 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
 
@@ -166,8 +162,8 @@ const DiaryView: React.FC = () => {
             {/* Filtros compactos en una línea */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center space-x-2">
-                <Filter size={16} className="text-gray-500" />
-                <span className="text-sm text-gray-600 font-medium hidden sm:inline">Filtrar:</span>
+                <Filter size={16} className="text-gray-500 dark:text-gray-400" />
+                <span className="text-sm text-gray-600 dark:text-gray-400 font-medium hidden sm:inline">Filtrar:</span>
               </div>
               
               {/* Filtros principales compactos */}
@@ -177,8 +173,8 @@ const DiaryView: React.FC = () => {
                   onClick={togglePrivateEntries}
                   className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
                     showPrivateEntries 
-                      ? 'bg-slate-100 text-slate-700 border-slate-300' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200'
+                      ? 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600' 
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600'
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -189,333 +185,149 @@ const DiaryView: React.FC = () => {
                   </span>
                 </motion.button>
 
-                {/* Sort compacto */}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as 'date' | 'emotion' | 'category')}
-                  className="px-2 py-1.5 bg-gray-100 border border-gray-200 rounded-full focus:outline-none focus:border-slate-400 text-xs font-medium text-gray-600 hover:bg-gray-200 transition-all"
-                >
-                  <option value="date">📅 Fecha</option>
-                  <option value="emotion">😊 Emoción</option>
-                  <option value="category">📁 Categoría</option>
-                </select>
+
+
+                {/* Emotion Filter compacto */}
+                {uniqueEmotions.length > 0 && (
+                  <select
+                    value={selectedEmotion}
+                    onChange={(e) => setSelectedEmotion(e.target.value)}
+                    className="px-2 py-1.5 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-full focus:outline-none focus:border-slate-400 dark:focus:border-slate-500 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+                  >
+                    <option value="">😊 Todas</option>
+                    {uniqueEmotions.map(emotionId => {
+                      const emotion = getEmotionData(emotionId);
+                      return (
+                        <option key={emotionId} value={emotionId}>
+                          {emotion?.icon} {emotion?.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
               </div>
             </div>
-
-            {/* Filtros específicos - Solo mostrar los activos + scroll horizontal */}
-            {(selectedEmotion || selectedCategory || selectedEntryType) && (
-              <div className="flex gap-2 overflow-x-auto pb-2">
-                {/* Emociones activas */}
-                {selectedEmotion && (
-                  <motion.button
-                    onClick={() => setSelectedEmotion('')}
-                    className="flex items-center space-x-1 px-2 py-1 bg-slate-600 text-white rounded-full text-xs font-medium whitespace-nowrap"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <span>{emotions.find(e => e.id === selectedEmotion)?.icon}</span>
-                    <span>{emotions.find(e => e.id === selectedEmotion)?.name}</span>
-                    <span className="ml-1">×</span>
-                  </motion.button>
-                )}
-
-                {/* Categorías activas */}
-                {selectedCategory && (
-                  <motion.button
-                    onClick={() => setSelectedCategory('')}
-                    className="flex items-center space-x-1 px-2 py-1 bg-slate-600 text-white rounded-full text-xs font-medium whitespace-nowrap"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {selectedCategory === 'emociones' && <span>📸 Emociones</span>}
-                    {selectedCategory === 'creatividad' && <span>🎨 Creatividad</span>}
-                    {selectedCategory === 'viajar' && <span>✈️ Viajar</span>}
-                    {selectedCategory === 'dormir' && <span>😴 Dormir</span>}
-                    {selectedCategory === 'fiestas' && <span>🎉 Fiestas</span>}
-                    {selectedCategory === 'salud' && <span>🌱 Salud</span>}
-                    <span className="ml-1">×</span>
-                  </motion.button>
-                )}
-
-                {/* Tipos de entrada activos */}
-                {selectedEntryType && (
-                  <motion.button
-                    onClick={() => setSelectedEntryType('')}
-                    className="flex items-center space-x-1 px-2 py-1 bg-slate-600 text-white rounded-full text-xs font-medium whitespace-nowrap"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {selectedEntryType === 'category' && <span>📝 Categoría</span>}
-                    {selectedEntryType === 'random' && <span>🎲 Aleatorio</span>}
-                    {selectedEntryType === 'free' && <span>✍️ Libre</span>}
-                    {selectedEntryType === 'inspiration' && <span>✨ Inspiración</span>}
-                    <span className="ml-1">×</span>
-                  </motion.button>
-                )}
-              </div>
-            )}
-
-            {/* Botón para expandir todos los filtros */}
-            <details className="group">
-              <summary className="flex items-center justify-center p-2 bg-gray-50 hover:bg-gray-100 rounded-lg cursor-pointer text-xs text-gray-600 font-medium transition-colors">
-                <span className="group-open:hidden">Más filtros</span>
-                <span className="hidden group-open:inline">Menos filtros</span>
-                <svg className="w-4 h-4 ml-1 group-open:rotate-180 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </summary>
-              
-              <div className="mt-3 space-y-2">
-                {/* Emociones */}
-                <div>
-                  <p className="text-xs font-medium text-gray-600 mb-2">Emociones:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {emotions.map(emotion => (
-                      <motion.button
-                        key={emotion.id}
-                        onClick={() => setSelectedEmotion(selectedEmotion === emotion.id ? '' : emotion.id)}
-                        className={`px-2 py-1 rounded-full text-xs font-medium transition-all border ${
-                          selectedEmotion === emotion.id
-                            ? 'bg-slate-600 text-white border-slate-600'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200'
-                        }`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <span className="mr-1">{emotion.icon}</span>
-                        <span className="hidden sm:inline">{emotion.name}</span>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Categorías */}
-                <div>
-                  <p className="text-xs font-medium text-gray-600 mb-2">Categorías:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {[
-                      { id: 'emociones', icon: '📸', name: 'Emociones' },
-                      { id: 'creatividad', icon: '🎨', name: 'Creatividad' },
-                      { id: 'viajar', icon: '✈️', name: 'Viajar' },
-                      { id: 'dormir', icon: '😴', name: 'Dormir' },
-                      { id: 'fiestas', icon: '🎉', name: 'Fiestas' },
-                      { id: 'salud', icon: '🌱', name: 'Salud' }
-                    ].map((category) => (
-                      <motion.button
-                        key={category.id}
-                        onClick={() => setSelectedCategory(selectedCategory === category.id ? '' : category.id)}
-                        className={`px-2 py-1 rounded-full text-xs font-medium transition-all border ${
-                          selectedCategory === category.id
-                            ? 'bg-slate-600 text-white border-slate-600'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200'
-                        }`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <span className="mr-1">{category.icon}</span>
-                        <span className="hidden sm:inline">{category.name}</span>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tipos de entrada */}
-                <div>
-                  <p className="text-xs font-medium text-gray-600 mb-2">Origen:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {[
-                      { id: 'category', icon: '📝', name: 'Categoría' },
-                      { id: 'random', icon: '🎲', name: 'Aleatorio' },
-                      { id: 'free', icon: '✍️', name: 'Libre' },
-                      { id: 'inspiration', icon: '✨', name: 'Inspiración' }
-                    ].map((entryType) => (
-                      <motion.button
-                        key={entryType.id}
-                        onClick={() => setSelectedEntryType(selectedEntryType === entryType.id ? '' : entryType.id)}
-                        className={`px-2 py-1 rounded-full text-xs font-medium transition-all border ${
-                          selectedEntryType === entryType.id
-                            ? 'bg-slate-600 text-white border-slate-600'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-200'
-                        }`}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <span className="mr-1">{entryType.icon}</span>
-                        <span className="hidden sm:inline">{entryType.name}</span>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </details>
           </div>
         </motion.div>
 
-        {/* Entries */}
-        {filteredEntries.length === 0 ? (
-          <motion.div
-            variants={itemVariants}
-            className="text-center py-12 space-y-4"
-          >
-            <div className="text-6xl">📝</div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                {searchTerm || selectedEmotion || selectedCategory || selectedEntryType 
-                  ? 'No se encontraron entradas' 
-                  : 'Tu diario está esperándote'
-                }
+        {/* Entries Grid */}
+        <motion.div variants={itemVariants}>
+          {filteredEntries.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📝</div>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                {diaryEntries.length === 0 ? 'Tu diario está esperándote' : 'No se encontraron entradas'}
               </h3>
-              <p className="text-gray-500 text-sm">
-                {searchTerm || selectedEmotion || selectedCategory || selectedEntryType 
-                  ? 'Intenta ajustar tus filtros de búsqueda'
-                  : 'Comienza escribiendo tu primera entrada'
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                {diaryEntries.length === 0 
+                  ? 'Comienza escribiendo tu primera idea o reflexión' 
+                  : 'Prueba ajustando los filtros de búsqueda'
                 }
               </p>
+              {diaryEntries.length === 0 && (
+                <motion.button
+                  onClick={handleNewEntry}
+                  className="px-6 py-3 bg-slate-600 dark:bg-slate-700 text-white rounded-xl hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Escribir primera entrada
+                </motion.button>
+              )}
             </div>
-            {!searchTerm && !selectedEmotion && !selectedCategory && !selectedEntryType && (
-              <motion.button
-                onClick={handleNewEntry}
-                className="bg-gradient-to-r from-slate-600 to-gray-700 text-white px-6 py-3 rounded-xl font-medium"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Escribir primera entrada
-              </motion.button>
-            )}
-          </motion.div>
-        ) : (
-          <motion.div 
-            variants={itemVariants} 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6"
-          >
-            <AnimatePresence>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredEntries.map((entry, index) => {
                 const emotionData = getEmotionData(entry.emotion);
+                const isHighlighted = entry.id === highlightEntryId;
                 
-                // Diferentes estilos de papel basados en la emoción y el índice
-                const paperStyles = [
-                  // Hoja de cuaderno rasgada
-                  "paper-notebook",
-                  // Post-it colorido
-                  "paper-postit", 
-                  // Pergamino vintage
-                  "paper-vintage",
-                  // Nota adhesiva
-                  "paper-sticky",
-                  // Papel de diario personal
-                  "paper-diary"
-                ];
-                
-                const paperStyle = paperStyles[index % paperStyles.length];
-                const emotionColor = emotionData?.color || '#64748b';
+                // Determinar el estilo
+                const entryStyle = entry.isPrivate ? 'private' : 'public';
                 
                 return (
                   <motion.div
                     key={entry.id}
                     id={`entry-${entry.id}`}
-                    layout
-                    initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ 
                       opacity: 1, 
                       y: 0,
-                      scale: 1
+                      scale: isHighlighted ? 1.05 : 1
                     }}
-                    exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                    whileHover={{ 
-                      scale: 1.03,
-                      y: -4,
-                      transition: { duration: 0.2 }
+                    transition={{ 
+                      delay: index * 0.1,
+                      scale: { duration: 0.3 }
                     }}
-                    className={`relative ${paperStyle} overflow-hidden break-inside-avoid cursor-pointer ${
-                      highlightEntryId === entry.id ? 'ring-4 ring-purple-400 ring-opacity-75 shadow-lg shadow-purple-200' : ''
-                    }`}
+                    className={`
+                      cursor-pointer transition-all duration-200 min-h-[240px]
+                      bg-white dark:bg-slate-700 
+                      border-l-4 rounded-xl shadow-lg
+                      hover:shadow-xl hover:-translate-y-1
+                      ${entry.isPrivate 
+                        ? 'border-l-slate-500 dark:border-l-slate-400' 
+                        : 'border-l-red-500 dark:border-l-red-400 rounded-l-none rounded-r-xl'
+                      }
+                      ${isHighlighted ? 'ring-2 ring-slate-400 dark:ring-slate-500' : ''}
+                    `}
                     style={{ 
-                      '--emotion-color': emotionColor
-                    } as any}
+                      borderLeftColor: entry.isPrivate ? (emotionData?.color || '#64748b') : undefined
+                    }}
+                    onClick={() => openModal(entry, entryStyle)}
+                    whileHover={{ y: -2, scale: 1.02 }}
                   >
-                    <motion.button
-                      onClick={() => openModal(entry, paperStyle)}
-                      className={`w-full p-6 text-left transition-all duration-200 ${
-                        paperStyle === 'paper-notebook' ? 'pl-12' : ''
-                      } ${paperStyle === 'paper-vintage' ? 'p-8' : ''}`}
-                      whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-2">
-                            {emotionData && (
-                              <span 
-                                className="px-2 py-1 rounded-full text-xs font-bold border bg-white/90 backdrop-blur-sm shadow-sm"
-                                style={{ 
-                                  borderColor: emotionData.color,
-                                  color: emotionData.color 
-                                }}
-                              >
-                                {emotionData.icon} {emotionData.name}
-                              </span>
-                            )}
-                            
-                            {/* Origin indicator */}
-                            {entry.entryType && (
-                              <span className="px-2 py-1 bg-slate-200 text-slate-800 rounded-full text-xs font-semibold border border-slate-300">
-                                {entry.entryType === 'category' && '📝 Categoría'}
-                                {entry.entryType === 'random' && '🎲 Aleatorio'}
-                                {entry.entryType === 'free' && '✍️ Libre'}
-                                {entry.entryType === 'inspiration' && '✨ Inspiración'}
-                                {entry.category && ` (${entry.category})`}
-                              </span>
-                            )}
-                            
-                            {entry.isPrivate && (
-                              <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold border border-red-200">
-                                <EyeOff size={12} className="inline mr-1" />
-                                Privada
-                              </span>
-                            )}
-                            <span className="text-xs text-gray-700 font-medium">
-                              {formatDate(entry.date)}
-                            </span>
-                          </div>
-                          
-                          <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 leading-snug">
-                            {entry.title}
-                          </h3>
-                          
-                          <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed font-medium">
-                            {entry.content.substring(0, 100)}
-                            {entry.content.length > 100 && '...'}
-                          </p>
-                          
-                          {entry.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-3">
-                              {entry.tags.slice(0, 2).map(tag => (
-                                <span 
-                                  key={tag}
-                                  className="px-1.5 py-0.5 bg-slate-200 text-slate-800 rounded text-xs truncate max-w-20 font-semibold border border-slate-300"
-                                >
-                                  #{tag}
-                                </span>
-                              ))}
-                              {entry.tags.length > 2 && (
-                                <span className="text-xs text-gray-700 self-center font-medium">
-                                  +{entry.tags.length - 2}
-                                </span>
-                              )}
-                            </div>
+                    <div className={`p-6 ${!entry.isPrivate ? 'pl-10' : ''} h-full flex flex-col`}>
+                      {/* Header with date and emotion */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg">{emotionData?.icon}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                            {formatDate(entry.date)}
+                          </span>
+                        </div>
+                        {entry.isPrivate && (
+                          <EyeOff size={14} className="text-gray-400 dark:text-gray-500" />
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-bold text-lg mb-3 line-clamp-2 text-gray-900 dark:text-gray-100">
+                        {entry.title}
+                      </h3>
+
+                      {/* Content preview */}
+                      <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-4 leading-relaxed flex-1">
+                        {entry.content}
+                      </p>
+
+                      {/* Meta info */}
+                      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-600 flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                          <span>{emotionData?.name}</span>
+                          {entry.category && (
+                            <>
+                              <span>•</span>
+                              <span className="capitalize">{entry.category}</span>
+                            </>
                           )}
                         </div>
-                        
+                        {entry.promptText && (
+                          <div className="text-xs text-gray-400 dark:text-gray-500">
+                            <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
+                              Prompt
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    </motion.button>
+                    </div>
                   </motion.div>
                 );
               })}
-            </AnimatePresence>
-          </motion.div>
-        )}
+            </div>
+          )}
+        </motion.div>
       </motion.div>
 
-      {/* Modal para ver detalles */}
+      {/* Modal */}
       <AnimatePresence>
         {showModal && selectedEntry && (
           <motion.div
@@ -526,141 +338,151 @@ const DiaryView: React.FC = () => {
             onClick={closeModal}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className={`
+                max-w-2xl w-full max-h-[80vh] overflow-y-auto
+                bg-white dark:bg-slate-700 
+                border-l-4 rounded-xl shadow-2xl
+                ${modalPaperStyle === 'private' 
+                  ? 'border-l-slate-500 dark:border-l-slate-400' 
+                  : 'border-l-red-500 dark:border-l-red-400 rounded-l-none rounded-r-xl'
+                }
+              `}
+              style={{ 
+                borderLeftColor: modalPaperStyle === 'private' ? (getEmotionData(selectedEntry.emotion)?.color || '#64748b') : undefined
+              }}
               onClick={(e) => e.stopPropagation()}
-              className={`relative ${modalPaperStyle} modal-size max-w-2xl w-full max-h-[80vh] overflow-y-auto`}
-              style={{
-                '--emotion-color': getEmotionData(selectedEntry.emotion)?.color || '#64748b'
-              } as any}
             >
-              {/* Botón cerrar */}
-              <motion.button
-                onClick={closeModal}
-                className="absolute top-4 right-4 z-10 p-2 bg-white/90 hover:bg-white shadow-lg border border-gray-200 rounded-full transition-all duration-200 text-gray-700 hover:text-gray-900"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </motion.button>
-
-              {/* Contenido del modal */}
-              <div className={`p-8 ${modalPaperStyle === 'paper-notebook' ? 'pl-16' : ''} ${modalPaperStyle === 'paper-vintage' ? 'p-12' : ''}`}>
+              <div className={`p-8 ${modalPaperStyle === 'public' ? 'pl-12' : ''}`}>
                 {/* Header */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex flex-wrap items-center gap-2">
-                    {(() => {
-                      const emotionData = getEmotionData(selectedEntry.emotion);
-                      return emotionData && (
-                        <span 
-                          className="px-3 py-1 rounded-full text-sm font-bold border-2 bg-white/95 backdrop-blur-sm shadow-sm"
-                          style={{ 
-                            borderColor: emotionData.color,
-                            color: emotionData.color 
-                          }}
-                        >
-                          {emotionData.icon} {emotionData.name}
-                        </span>
-                      );
-                    })()}
-                    
-                    {selectedEntry.entryType && (
-                      <span className="px-3 py-1 bg-slate-200 text-slate-800 rounded-full text-sm font-semibold border border-slate-300">
-                        {selectedEntry.entryType === 'category' && '📝 Categoría'}
-                        {selectedEntry.entryType === 'random' && '🎲 Aleatorio'}
-                        {selectedEntry.entryType === 'free' && '✍️ Libre'}
-                        {selectedEntry.entryType === 'inspiration' && '✨ Inspiración'}
-                        {selectedEntry.category && ` (${selectedEntry.category})`}
-                      </span>
-                    )}
-                    
-                    {selectedEntry.isPrivate && (
-                      <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold border border-red-200">
-                        <EyeOff size={14} className="inline mr-1" />
-                        Privada
-                      </span>
-                    )}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-2xl">{getEmotionData(selectedEntry.emotion)?.icon}</span>
+                    <div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {formatDate(selectedEntry.date)}
+                      </div>
+                      <div className="text-xs text-gray-400 dark:text-gray-500 capitalize">
+                        {getEmotionData(selectedEntry.emotion)?.name}
+                        {selectedEntry.category && ` • ${selectedEntry.category}`}
+                      </div>
+                    </div>
                   </div>
-
-                  <h2 className="text-2xl font-bold text-gray-900 leading-tight">
-                    {selectedEntry.title}
-                  </h2>
-
-                  <div className="flex items-center space-x-2 text-sm text-gray-700 font-medium">
-                    <Calendar size={16} />
-                    <span>{new Date(selectedEntry.date).toLocaleString('es-ES')}</span>
-                  </div>
-                </div>
-
-                {/* Prompt si existe */}
-                {selectedEntry.promptText && (
-                  <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded mb-6 shadow-sm">
-                    <p className="text-amber-900 text-sm font-semibold mb-2">
-                      💡 Prompt utilizado:
-                    </p>
-                    <p className="text-amber-800 text-sm italic font-medium">
-                      "{selectedEntry.promptText}"
-                    </p>
-                  </div>
-                )}
-
-                {/* Contenido principal */}
-                <div className="prose prose-gray max-w-none mb-6">
-                  <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-base font-medium">
-                    {selectedEntry.content}
-                  </p>
-                </div>
-
-                {/* Tags */}
-                {selectedEntry.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {selectedEntry.tags.map((tag: string) => (
-                      <span 
-                        key={tag}
-                        className="px-3 py-1 bg-slate-200 text-slate-800 rounded-full text-sm font-semibold border border-slate-300"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Acciones */}
-                <div className="flex items-center justify-end space-x-3 pt-4 border-t border-black/20">
-                  <motion.button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Navigate to edit mode (future feature)
-                    }}
-                    className="flex items-center space-x-2 px-4 py-2 bg-slate-100 text-slate-800 hover:bg-slate-200 hover:text-slate-900 rounded-lg transition-all duration-200 font-medium border border-slate-200"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Edit3 size={16} />
-                    <span>Editar</span>
-                  </motion.button>
                   
-                  <motion.button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (confirm('¿Estás segura de que quieres eliminar esta entrada?')) {
-                        deleteEntry(selectedEntry.id);
-                        closeModal();
-                      }
-                    }}
-                    className="flex items-center space-x-2 px-4 py-2 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 rounded-lg transition-all duration-200 font-medium border border-red-200"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Trash2 size={16} />
-                    <span>Eliminar</span>
-                  </motion.button>
+                  <div className="flex items-center space-x-2">
+                    {selectedEntry.isPrivate && (
+                      <EyeOff size={16} className="text-gray-400 dark:text-gray-500" />
+                    )}
+                    <motion.button
+                      onClick={closeModal}
+                      className="p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <ArrowLeft size={16} className="text-gray-600 dark:text-gray-300" />
+                    </motion.button>
+                  </div>
                 </div>
+
+                {/* Content */}
+                {editingEntry?.id === selectedEntry.id ? (
+                  <div className="space-y-4">
+                    <input
+                      value={editedTitle}
+                      onChange={(e) => setEditedTitle(e.target.value)}
+                      className="w-full text-xl font-bold bg-transparent border-b-2 border-gray-300 dark:border-gray-600 focus:border-slate-500 dark:focus:border-slate-400 outline-none pb-2 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                      placeholder="Título de la entrada"
+                    />
+                    <textarea
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      className="w-full h-64 bg-transparent resize-none outline-none text-gray-800 dark:text-gray-200 leading-relaxed placeholder-gray-500 dark:placeholder-gray-400"
+                      placeholder="Escribe tu entrada aquí..."
+                    />
+                    <div className="flex items-center space-x-3 pt-4">
+                      <motion.button
+                        onClick={() => {
+                          updateEntry(selectedEntry.id, {
+                            title: editedTitle,
+                            content: editedContent
+                          });
+                          setEditingEntry(null);
+                          closeModal();
+                        }}
+                        className="px-4 py-2 bg-slate-600 dark:bg-slate-700 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        Guardar
+                      </motion.button>
+                      <motion.button
+                        onClick={() => setEditingEntry(null)}
+                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        Cancelar
+                      </motion.button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+                      {selectedEntry.title}
+                    </h1>
+                    
+                    {selectedEntry.promptText && (
+                      <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border-l-4 border-slate-400 dark:border-slate-500">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Prompt:</div>
+                        <div className="text-sm text-gray-700 dark:text-gray-300 italic">
+                          {selectedEntry.promptText}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="prose prose-sm max-w-none">
+                      <p className="text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap">
+                        {selectedEntry.content}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-between pt-6 mt-6 border-t border-gray-200 dark:border-gray-600">
+                      <div className="flex items-center space-x-3">
+                        <motion.button
+                          onClick={() => {
+                            setEditingEntry(selectedEntry);
+                            setEditedTitle(selectedEntry.title);
+                            setEditedContent(selectedEntry.content);
+                          }}
+                          className="flex items-center space-x-2 px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <Edit3 size={14} />
+                          <span className="text-sm">Editar</span>
+                        </motion.button>
+                      </div>
+                      
+                      <motion.button
+                        onClick={() => {
+                          if (confirm('¿Estás seguro de que quieres eliminar esta entrada?')) {
+                            deleteEntry(selectedEntry.id);
+                            closeModal();
+                          }
+                        }}
+                        className="flex items-center space-x-2 px-3 py-2 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <Trash2 size={14} />
+                        <span className="text-sm">Eliminar</span>
+                      </motion.button>
+                    </div>
+                  </>
+                )}
               </div>
             </motion.div>
           </motion.div>

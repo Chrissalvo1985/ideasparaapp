@@ -108,7 +108,7 @@ const MessageContent = React.memo<{ content: string; onNavigateToEntry: (entryId
           return (
             <button
               key={index}
-              onClick={() => onNavigateToEntry(part.entryId)}
+              onClick={() => part.entryId && onNavigateToEntry(part.entryId)}
               className="inline-flex items-center mx-1 px-2 py-1 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg text-sm transition-colors border border-purple-200 group relative touch-manipulation"
               title={entry ? `"${entryTitle || entryEmotion}" - ${new Date(entry.date).toLocaleDateString()}` : "Ver entrada referenciada"}
               style={{ 
@@ -194,7 +194,7 @@ const MessageBubble = React.memo<{ message: any; index: number; onNavigateToEntr
   </motion.div>
 ));
 
-const WelcomeMessage = React.memo<{ apiKey: string | undefined; onNavigate: () => void; onSetMessage: (msg: string) => void }>(({ onSetMessage }) => (
+const WelcomeMessage = React.memo<{ onSetMessage: (msg: string) => void }>(({ onSetMessage }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -398,41 +398,13 @@ const ConciencIAView: React.FC = () => {
     navigate(`/diary?highlight=${entryId}`);
   }, [navigate]);
 
-  // Determinar el estilo de backdrop apropiado para compatibilidad Safari
-  const getBackdropStyle = () => {
-    if (isSafari() && !CSS.supports('backdrop-filter', 'blur(10px)')) {
-      // Fallback para Safari más antiguo
-      return {
-        backgroundColor: 'rgba(255, 255, 255, 0.95)'
-      };
-    }
-    return {};
-  };
+
 
   return (
-    <div 
-      className="flex flex-col max-w-4xl mx-auto"
-      style={{
-        height: '100dvh', // Usar dynamic viewport height si está disponible
-        maxHeight: '-webkit-fill-available',
-        background: 'rgba(255, 255, 255, 0.6)',
-        // Compatibilidad backdrop-filter
-        backdropFilter: CSS.supports('backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
-        WebkitBackdropFilter: CSS.supports('-webkit-backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
-        ...getBackdropStyle()
-      }}
-    >
-      {/* Header */}
-      <div 
-        className="flex-shrink-0 border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: CSS.supports('backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
-          WebkitBackdropFilter: CSS.supports('-webkit-backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
-          paddingTop: `calc(12px + env(safe-area-inset-top, 0px))`,
-          ...getBackdropStyle()
-        }}
-      >
+    <div className="lg:min-h-screen px-6 lg:px-8 pt-6 lg:pt-8 pb-4 lg:pb-8 max-w-4xl lg:mx-auto">
+      <div className="flex flex-col h-full min-h-[80vh] bg-white/60 backdrop-blur-sm rounded-2xl lg:rounded-3xl shadow-xl border border-gray-200/50">
+        {/* Header */}
+        <div className="flex-shrink-0 border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4 bg-white/95 backdrop-blur-sm rounded-t-2xl lg:rounded-t-3xl">
         <div className="flex items-center justify-between">
           <button
             onClick={handleGoBack}
@@ -471,28 +443,11 @@ const ConciencIAView: React.FC = () => {
         </div>
       </div>
 
-      {/* Messages Area */}
-      <div 
-        className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 chat-messages-container"
-        style={{
-          // Scroll mejorado para Safari iOS
-          scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'auto', // Cambiar de 'touch' (deprecated) a 'auto'
-          overscrollBehavior: 'contain',
-          // Hardware acceleration para Safari
-          transform: 'translateZ(0)',
-          WebkitTransform: 'translateZ(0)',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-          // Mejorar performance en iOS
-          willChange: 'scroll-position'
-        }}
-      >
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 chat-messages-container smooth-scroll">
         {chatMessages.length === 0 ? (
           <div className="h-full flex items-center justify-center px-4 lg:px-6 py-4">
             <WelcomeMessage 
-              apiKey="demo"
-              onNavigate={handleNavigateToSettings}
               onSetMessage={handleSetInputMessage}
             />
           </div>
@@ -532,18 +487,8 @@ const ConciencIAView: React.FC = () => {
         )}
       </div>
 
-      {/* Input Area */}
-      <div 
-        className="flex-shrink-0 border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: CSS.supports('backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
-          WebkitBackdropFilter: CSS.supports('-webkit-backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
-          // Safe areas mejoradas para iOS
-          paddingBottom: `calc(12px + env(safe-area-inset-bottom, 0px))`,
-          ...getBackdropStyle()
-        }}
-      >
+        {/* Input Area */}
+        <div className="flex-shrink-0 border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4 bg-white/95 backdrop-blur-sm rounded-b-2xl lg:rounded-b-3xl pb-safe">
         <div className="flex items-end space-x-3">
           <div className="flex-1 relative">
             <textarea
@@ -603,6 +548,7 @@ const ConciencIAView: React.FC = () => {
           <p className="text-xs text-gray-500">
             💡 ConciencIA está funcionando en modo demo con respuestas predefinidas
           </p>
+        </div>
         </div>
       </div>
     </div>
