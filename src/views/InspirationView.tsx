@@ -80,21 +80,21 @@ const InspirationView: React.FC = () => {
         <motion.div variants={itemVariants}>
           <motion.button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-full bg-white/60 backdrop-blur-sm border border-slate-200 mb-4"
+            className="p-2 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200 dark:border-slate-600 mb-4"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ArrowLeft size={20} className="text-slate-600" />
+            <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
           </motion.button>
           
           <div className="text-center mb-6">
-            <h1 className="text-3xl lg:text-5xl font-black mb-3 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-3xl lg:text-5xl font-black mb-3 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 dark:from-gray-200 dark:via-slate-300 dark:to-gray-100 bg-clip-text text-transparent leading-tight">
               Inspiración
             </h1>
-            <p className="text-lg lg:text-xl text-gray-600 font-light">
+            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 font-light">
               palabras para acompañarte
             </p>
-            <p className="text-sm text-gray-500 mt-2 font-light">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-light">
               Mensajes, consejos y reflexiones para nutrir tu alma escritora
             </p>
           </div>
@@ -103,40 +103,40 @@ const InspirationView: React.FC = () => {
         {/* Filtros */}
         <motion.div variants={itemVariants}>
           <div className="flex items-center space-x-2 mb-4">
-            <Filter size={16} className="text-gray-500" />
-            <span className="text-sm text-gray-600 font-medium">Filtrar por:</span>
+            <Filter size={16} className="text-gray-500 dark:text-gray-400" />
+            <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">Filtrar por:</span>
           </div>
           
           <div className="flex flex-wrap gap-2 mb-4">
             <button
               onClick={() => setSelectedFilter('all')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                 selectedFilter === 'all'
-                  ? 'bg-slate-100 text-slate-700 border-slate-300'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              } border`}
+                  ? 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600'
+              }`}
             >
               Todas
             </button>
             
             <button
               onClick={() => setSelectedFilter('category')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                 selectedFilter === 'category'
-                  ? 'bg-slate-100 text-slate-700 border-slate-300'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              } border`}
+                  ? 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600'
+              }`}
             >
               Por Categoría
             </button>
             
             <button
               onClick={() => setSelectedFilter('type')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                 selectedFilter === 'type'
-                  ? 'bg-slate-100 text-slate-700 border-slate-300'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              } border`}
+                  ? 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600'
+              }`}
             >
               Por Tipo
             </button>
@@ -149,11 +149,11 @@ const InspirationView: React.FC = () => {
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
                     selectedCategory === category.id
-                      ? 'bg-slate-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  } border`}
+                      ? 'bg-slate-600 dark:bg-slate-700 text-white border-slate-600 dark:border-slate-700'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600'
+                  }`}
                 >
                   {category.name}
                 </button>
@@ -169,11 +169,11 @@ const InspirationView: React.FC = () => {
                   <button
                     key={type}
                     onClick={() => setSelectedType(type)}
-                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                    className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
                       selectedType === type
-                        ? 'bg-slate-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    } border`}
+                        ? 'bg-slate-600 dark:bg-slate-700 text-white border-slate-600 dark:border-slate-700'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600'
+                    }`}
                   >
                     <Icon size={12} />
                     <span>{label}</span>
@@ -186,7 +186,7 @@ const InspirationView: React.FC = () => {
 
         {/* Contador */}
         <motion.div variants={itemVariants}>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
             {filteredInspirations.length} inspiraciones encontradas
           </p>
         </motion.div>
@@ -208,12 +208,12 @@ const InspirationView: React.FC = () => {
                 <div className="flex items-center justify-between mt-3 px-2">
                   <div className="flex items-center space-x-2">
                     {inspiration.category && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full font-medium">
+                      <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-full font-medium">
                         {categories.find(c => c.id === inspiration.category)?.name || inspiration.category}
                       </span>
                     )}
                     {inspiration.type && (
-                      <span className="px-2 py-1 bg-slate-100 text-slate-700 text-xs rounded-full font-medium flex items-center space-x-1">
+                      <span className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-full font-medium flex items-center space-x-1">
                         {React.createElement(typeIcons[inspiration.type as keyof typeof typeIcons], { size: 10 })}
                         <span>{typeLabels[inspiration.type as keyof typeof typeLabels]}</span>
                       </span>
@@ -223,7 +223,7 @@ const InspirationView: React.FC = () => {
                   <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="p-1.5 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                    className="p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                   >
                     <Heart size={12} />
                   </motion.button>
@@ -237,11 +237,11 @@ const InspirationView: React.FC = () => {
         {filteredInspirations.length === 0 && (
           <motion.div variants={itemVariants}>
             <div className="text-center py-12">
-              <Sparkles size={48} className="text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-600 mb-2">
+              <Sparkles size={48} className="text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
                 No hay inspiraciones para este filtro
               </h3>
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-gray-400">
                 Intenta con otro filtro o explora todas las inspiraciones
               </p>
             </div>

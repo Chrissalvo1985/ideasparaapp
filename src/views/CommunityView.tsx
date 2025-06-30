@@ -189,34 +189,34 @@ const CommunityView: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-6 mb-4"
+      className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-slate-600 shadow-sm hover:shadow-md dark:hover:shadow-slate-900/20 transition-all p-6 mb-4"
     >
       {/* Header del post */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 dark:from-slate-500 dark:to-slate-600 rounded-full flex items-center justify-center">
             <span className="text-white font-semibold text-sm">
               {post.author.displayName[0].toUpperCase()}
             </span>
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h4 className="font-semibold text-gray-800">{post.author.displayName}</h4>
+              <h4 className="font-semibold text-gray-800 dark:text-slate-200">{post.author.displayName}</h4>
               {post.author.isVerified && (
                 <Star size={16} className="text-amber-500 fill-current" />
               )}
             </div>
-            <p className="text-sm text-gray-500">@{post.author.username}</p>
+            <p className="text-sm text-gray-500 dark:text-slate-400">@{post.author.username}</p>
           </div>
         </div>
         
         <div className="flex items-center space-x-2">
           {post.isPublic ? (
-            <Globe size={16} className="text-green-500" />
+            <Globe size={16} className="text-green-500 dark:text-green-400" />
           ) : (
-            <Lock size={16} className="text-gray-400" />
+            <Lock size={16} className="text-gray-400 dark:text-slate-500" />
           )}
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-500 dark:text-slate-400">
             {new Date(post.createdAt).toLocaleDateString()}
           </span>
         </div>
@@ -224,14 +224,14 @@ const CommunityView: React.FC = () => {
 
       {/* Prompt origen si existe */}
       {post.prompt && (
-        <div className="mb-4 p-3 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border border-slate-200">
+        <div className="mb-4 p-3 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-700/50 dark:to-slate-600/50 rounded-lg border border-slate-200 dark:border-slate-600">
           <div className="flex items-center space-x-2 mb-2">
-            <Coffee size={16} className="text-slate-600" />
-            <span className="text-sm font-medium text-slate-700">
+            <Coffee size={16} className="text-slate-600 dark:text-slate-300" />
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
               Inspirado por: {post.prompt.title}
             </span>
           </div>
-          <p className="text-sm text-slate-600 italic">
+          <p className="text-sm text-slate-600 dark:text-slate-300 italic">
             "{post.prompt.content}"
           </p>
         </div>
@@ -240,9 +240,9 @@ const CommunityView: React.FC = () => {
       {/* Contenido del post */}
       <div className="mb-4">
         {post.title && (
-          <h3 className="font-semibold text-lg text-gray-800 mb-2">{post.title}</h3>
+          <h3 className="font-semibold text-lg text-gray-800 dark:text-slate-200 mb-2">{post.title}</h3>
         )}
-        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+        <p className="text-gray-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
           {post.content}
         </p>
       </div>
@@ -253,7 +253,7 @@ const CommunityView: React.FC = () => {
           {post.publicCategories.map((category, index) => (
             <span
               key={index}
-              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+              className="px-2 py-1 bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 text-xs rounded-full"
             >
               {category}
             </span>
@@ -262,14 +262,14 @@ const CommunityView: React.FC = () => {
       )}
 
       {/* Acciones */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+      <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-slate-600">
         <div className="flex items-center space-x-6">
           <button
             onClick={() => likePost(post.id)}
             className={`flex items-center space-x-1 transition-colors ${
               post.hasLiked 
                 ? 'text-red-500 hover:text-red-600' 
-                : 'text-gray-500 hover:text-red-500'
+                : 'text-gray-500 dark:text-slate-400 hover:text-red-500'
             }`}
           >
             <Heart 
@@ -279,19 +279,19 @@ const CommunityView: React.FC = () => {
             <span className="text-sm font-medium">{post.likes}</span>
           </button>
 
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500 transition-colors">
+          <button className="flex items-center space-x-1 text-gray-500 dark:text-slate-400 hover:text-blue-500 transition-colors">
             <MessageCircle size={18} />
             <span className="text-sm font-medium">{post.comments}</span>
           </button>
 
-          <button className="flex items-center space-x-1 text-gray-500 hover:text-green-500 transition-colors">
+          <button className="flex items-center space-x-1 text-gray-500 dark:text-slate-400 hover:text-green-500 transition-colors">
             <Share size={18} />
             <span className="text-sm font-medium">{post.shares}</span>
           </button>
         </div>
 
         <div className="flex items-center space-x-2">
-          <button className="text-gray-400 hover:text-gray-600 transition-colors">
+          <button className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 transition-colors">
             <Bookmark size={18} />
           </button>
         </div>
@@ -303,30 +303,30 @@ const CommunityView: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-6 mb-4"
+      className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl border border-gray-200 dark:border-slate-600 shadow-sm hover:shadow-md dark:hover:shadow-slate-900/20 transition-all p-6 mb-4"
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <Coffee size={20} className="text-slate-600" />
-            <span className="text-sm font-medium text-slate-700">{prompt.category}</span>
-            <span className="text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded-full">
+            <Coffee size={20} className="text-slate-600 dark:text-slate-300" />
+            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{prompt.category}</span>
+            <span className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full">
               {prompt.difficulty}
             </span>
           </div>
-          <h3 className="font-semibold text-lg text-gray-800 mb-2">{prompt.title}</h3>
-          <p className="text-gray-600 leading-relaxed mb-4">{prompt.content}</p>
+          <h3 className="font-semibold text-lg text-gray-800 dark:text-slate-200 mb-2">{prompt.title}</h3>
+          <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-4">{prompt.content}</p>
           
           {prompt.emotionalSupport && (
-            <div className="mb-4 p-3 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border border-slate-200">
-              <p className="text-sm text-slate-700">💝 {prompt.emotionalSupport}</p>
+            <div className="mb-4 p-3 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-700/50 dark:to-slate-600/50 rounded-lg border border-slate-200 dark:border-slate-600">
+              <p className="text-sm text-slate-700 dark:text-slate-200">💝 {prompt.emotionalSupport}</p>
             </div>
           )}
         </div>
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4 text-sm text-gray-500">
+        <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-slate-400">
           <span>✨ {prompt.category}</span>
           <span>🎯 {prompt.difficulty}</span>
         </div>
@@ -336,7 +336,7 @@ const CommunityView: React.FC = () => {
             setSelectedMinigame(null);
             setSelectedCategory(prompt);
           }}
-          className="px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 transition-all"
+          className="px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-700 dark:from-slate-600 dark:to-slate-700 text-white rounded-lg hover:from-slate-700 hover:to-slate-800 dark:hover:from-slate-500 dark:hover:to-slate-600 transition-all"
         >
           Responder
         </button>
@@ -354,7 +354,7 @@ const CommunityView: React.FC = () => {
   }> = ({ title, description, icon, color, onClick, stats }) => (
     <motion.button
       onClick={onClick}
-      className={`relative overflow-hidden bg-gradient-to-br ${color} rounded-xl p-6 text-white text-left shadow-lg hover:shadow-xl transition-all group`}
+      className={`relative overflow-hidden bg-gradient-to-br ${color} rounded-xl p-6 text-white text-left shadow-lg hover:shadow-xl dark:hover:shadow-slate-900/20 transition-all group`}
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
     >
@@ -389,15 +389,15 @@ const CommunityView: React.FC = () => {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 50, opacity: 0 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+        className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {!currentCard ? (
           <div>
             <div className="text-center mb-6">
-              <CreditCard size={48} className="mx-auto text-slate-600 mb-4" />
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Tarjetas Sociales</h2>
-              <p className="text-gray-600">Elige una categoría para obtener una pregunta que rompa el hielo</p>
+              <CreditCard size={48} className="mx-auto text-slate-600 dark:text-slate-300 mb-4" />
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-200 mb-2">Tarjetas Sociales</h2>
+              <p className="text-gray-600 dark:text-slate-300">Elige una categoría para obtener una pregunta que rompa el hielo</p>
             </div>
             
             <div className="space-y-3">
@@ -405,7 +405,7 @@ const CommunityView: React.FC = () => {
                 <motion.button
                   key={index}
                   onClick={() => drawSocialCard(category)}
-                  className={`w-full p-4 bg-gradient-to-r ${category.color} text-white rounded-xl text-left hover:shadow-lg transition-all`}
+                  className={`w-full p-4 bg-gradient-to-r ${category.color} text-white rounded-xl text-left hover:shadow-lg dark:hover:shadow-slate-900/20 transition-all`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -425,14 +425,14 @@ const CommunityView: React.FC = () => {
             <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${selectedCategory.color} rounded-full flex items-center justify-center text-2xl`}>
               {selectedCategory.icon}
             </div>
-            <h3 className="font-bold text-gray-800 mb-2">{selectedCategory.category}</h3>
-            <div className="bg-slate-50 rounded-xl p-6 mb-6">
-              <p className="text-gray-800 text-lg leading-relaxed">"{currentCard}"</p>
+            <h3 className="font-bold text-gray-800 dark:text-slate-200 mb-2">{selectedCategory.category}</h3>
+            <div className="bg-slate-50 dark:bg-slate-700 rounded-xl p-6 mb-6">
+              <p className="text-gray-800 dark:text-slate-200 text-lg leading-relaxed">"{currentCard}"</p>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => drawSocialCard(selectedCategory)}
-                className="flex-1 px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center space-x-2"
+                className="flex-1 px-4 py-2 bg-slate-600 dark:bg-slate-600 text-white rounded-lg hover:bg-slate-700 dark:hover:bg-slate-500 transition-colors flex items-center justify-center space-x-2"
               >
                 <Shuffle size={16} />
                 <span>Otra carta</span>
@@ -442,7 +442,7 @@ const CommunityView: React.FC = () => {
                   setCurrentCard('');
                   setSelectedCategory(null);
                 }}
-                className="px-4 py-2 text-slate-600 hover:text-slate-800 transition-colors"
+                className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
               >
                 Cambiar categoría
               </button>
@@ -456,7 +456,7 @@ const CommunityView: React.FC = () => {
             setCurrentCard('');
             setSelectedCategory(null);
           }}
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 p-2 text-gray-400 dark:text-slate-400 hover:text-gray-600 dark:hover:text-slate-200 transition-colors"
         >
           ✕
         </button>
@@ -476,27 +476,27 @@ const CommunityView: React.FC = () => {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 50, opacity: 0 }}
-        className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-center"
+        className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-6xl mb-4">🥠</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Tu Galleta de la Fortuna</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-200 mb-4">Tu Galleta de la Fortuna</h2>
         
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 mb-6 border border-amber-200">
-          <p className="text-gray-800 text-lg italic leading-relaxed">"{currentFortune}"</p>
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-slate-700/50 dark:to-slate-600/50 rounded-xl p-6 mb-6 border border-amber-200 dark:border-slate-600">
+          <p className="text-gray-800 dark:text-slate-200 text-lg italic leading-relaxed">"{currentFortune}"</p>
         </div>
         
         <div className="flex space-x-3">
           <button
             onClick={openFortuneCookie}
-            className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors flex items-center justify-center space-x-2"
+            className="flex-1 px-4 py-2 bg-amber-500 dark:bg-amber-600 text-white rounded-lg hover:bg-amber-600 dark:hover:bg-amber-500 transition-colors flex items-center justify-center space-x-2"
           >
             <Gift size={16} />
             <span>Otra galleta</span>
           </button>
           <button
             onClick={() => setShowFortune(false)}
-            className="px-4 py-2 text-slate-600 hover:text-slate-800 transition-colors"
+            className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
           >
             Cerrar
           </button>
@@ -504,7 +504,7 @@ const CommunityView: React.FC = () => {
         
         <button
           onClick={() => setShowFortune(false)}
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 p-2 text-gray-400 dark:text-slate-400 hover:text-gray-600 dark:hover:text-slate-200 transition-colors"
         >
           ✕
         </button>
@@ -530,15 +530,15 @@ const CommunityView: React.FC = () => {
         >
           <motion.button
             onClick={() => navigate(-1)}
-            className="p-2 rounded-full bg-white/60 backdrop-blur-sm border border-slate-200"
+            className="p-2 rounded-full bg-white/60 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-600"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ArrowLeft size={20} className="text-slate-600" />
+            <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
           </motion.button>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">Zona de Juegos</h1>
-            <p className="text-sm text-gray-600">
+            <h1 className="text-xl font-bold text-gray-800 dark:text-slate-200">Zona de Juegos</h1>
+            <p className="text-sm text-gray-600 dark:text-slate-400">
               Minijuegos creativos para inspirarte y conectar
             </p>
           </div>
@@ -549,7 +549,7 @@ const CommunityView: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-gradient-to-r from-slate-600 to-slate-700 rounded-xl p-6 text-white"
+          className="bg-gradient-to-r from-slate-600 to-slate-700 dark:from-slate-700 dark:to-slate-800 rounded-xl p-6 text-white"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
@@ -584,8 +584,8 @@ const CommunityView: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Gamepad2 className="mr-2 text-slate-600" />
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center">
+            <Gamepad2 className="mr-2 text-slate-600 dark:text-slate-300" />
             Minijuegos Disponibles
           </h2>
           
@@ -616,32 +616,32 @@ const CommunityView: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Timer className="mr-2 text-slate-600" />
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-200 mb-4 flex items-center">
+            <Timer className="mr-2 text-slate-600 dark:text-slate-300" />
             Próximamente
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl p-6 opacity-50">
+            <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200 dark:border-slate-600 rounded-xl p-6 opacity-50">
               <div className="flex items-center space-x-3 mb-3">
-                <div className="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center">
-                  <Target size={24} className="text-slate-500" />
+                <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center">
+                  <Target size={24} className="text-slate-500 dark:text-slate-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800">Desafíos Diarios</h3>
-                  <p className="text-gray-600 text-sm">Retos creativos personalizados</p>
+                  <h3 className="font-semibold text-gray-800 dark:text-slate-200">Desafíos Diarios</h3>
+                  <p className="text-gray-600 dark:text-slate-400 text-sm">Retos creativos personalizados</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl p-6 opacity-50">
+            <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200 dark:border-slate-600 rounded-xl p-6 opacity-50">
               <div className="flex items-center space-x-3 mb-3">
-                <div className="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center">
-                  <Crown size={24} className="text-slate-500" />
+                <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center">
+                  <Crown size={24} className="text-slate-500 dark:text-slate-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800">Torneos Creativos</h3>
-                  <p className="text-gray-600 text-sm">Compite con otros creativos</p>
+                  <h3 className="font-semibold text-gray-800 dark:text-slate-200">Torneos Creativos</h3>
+                  <p className="text-gray-600 dark:text-slate-400 text-sm">Compite con otros creativos</p>
                 </div>
               </div>
             </div>

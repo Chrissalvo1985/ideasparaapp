@@ -48,17 +48,17 @@ const EmotionExplorer: React.FC = () => {
         <motion.div variants={itemVariants} className="flex items-center space-x-4">
           <motion.button
             onClick={() => selectedEmotion ? setSelectedEmotion(null) : navigate('/')}
-            className="p-2 rounded-full bg-white/60 backdrop-blur-sm border border-purple-100"
+            className="p-2 rounded-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-purple-100 dark:border-purple-600/50 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ArrowLeft size={20} className="text-purple-600" />
+            <ArrowLeft size={20} className="text-purple-600 dark:text-purple-400" />
           </motion.button>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">
+            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200">
               {selectedEmotion ? selectedEmotionData?.name : 'Explorador de Emociones'}
             </h1>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {selectedEmotion 
                 ? 'Conecta con prompts específicos para esta emoción'
                 : 'Selecciona cómo te sientes hoy'
@@ -83,7 +83,7 @@ const EmotionExplorer: React.FC = () => {
                   key={emotion.id}
                   variants={itemVariants}
                   onClick={() => handleEmotionSelect(emotion)}
-                  className="relative bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-purple-100 text-left overflow-hidden group"
+                  className="relative bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl p-6 border border-purple-100 dark:border-purple-600/30 text-left overflow-hidden group transition-colors"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   style={{ 
@@ -103,7 +103,7 @@ const EmotionExplorer: React.FC = () => {
                     >
                       {emotion.name}
                     </h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                       {emotion.description}
                     </p>
                   </div>
@@ -129,7 +129,7 @@ const EmotionExplorer: React.FC = () => {
               {/* Emotion Card */}
               <motion.div
                 variants={itemVariants}
-                className="bg-gradient-to-br from-white/70 to-white/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-100"
+                className="bg-gradient-to-br from-white/70 to-white/50 dark:from-slate-800/70 dark:to-slate-900/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-100 dark:border-purple-600/30"
                 style={{ 
                   boxShadow: `0 8px 32px ${selectedEmotionData?.color}20` 
                 }}
@@ -148,7 +148,7 @@ const EmotionExplorer: React.FC = () => {
                     >
                       {selectedEmotionData?.name}
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-300">
                       {selectedEmotionData?.description}
                     </p>
                   </div>
@@ -158,7 +158,7 @@ const EmotionExplorer: React.FC = () => {
                 <div className="flex space-x-3">
                   <motion.button
                     onClick={handleRandomPrompt}
-                    className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-3 flex items-center justify-center space-x-2"
+                    className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-600 dark:to-purple-700 text-white rounded-xl p-3 flex items-center justify-center space-x-2 transition-colors"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -171,8 +171,8 @@ const EmotionExplorer: React.FC = () => {
               {/* Prompts */}
               {emotionPrompts.length > 0 && (
                 <motion.div variants={itemVariants}>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-                    <Sparkles size={20} className="text-purple-600" />
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center space-x-2">
+                    <Sparkles size={20} className="text-purple-600 dark:text-purple-400" />
                     <span>Prompts para {selectedEmotionData?.name}</span>
                   </h3>
                   
@@ -181,7 +181,7 @@ const EmotionExplorer: React.FC = () => {
                       <motion.button
                         key={prompt.id}
                         onClick={() => handlePromptSelect(prompt)}
-                        className="w-full bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-purple-100 text-left group hover:bg-white/80 transition-colors"
+                        className="w-full bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-4 border border-purple-100 dark:border-purple-600/30 text-left group hover:bg-white/80 dark:hover:bg-slate-800/80 transition-colors"
                         whileHover={{ x: 4 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -212,13 +212,13 @@ const EmotionExplorer: React.FC = () => {
                                  prompt.category === 'guided' ? 'Guiado' : 'Liberación'}
                               </span>
                             </div>
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
                               {prompt.text}
                             </p>
                           </div>
                           <Edit3 
                             size={18} 
-                            className="text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity ml-3 flex-shrink-0" 
+                            className="text-purple-600 dark:text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity ml-3 flex-shrink-0" 
                           />
                         </div>
                       </motion.button>

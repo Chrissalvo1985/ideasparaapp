@@ -58,10 +58,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
 
   return (
     <motion.div
-      className="fixed inset-0 flex items-center justify-center z-50 font-1 overflow-hidden"
-      style={{ 
-        background: `linear-gradient(135deg, var(--color-4) 0%, var(--color-7) 100%)` 
-      }}
+      className="fixed inset-0 flex items-center justify-center z-50 font-1 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
     >
@@ -78,7 +75,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
             }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ 
-              opacity: [0, 0.06, 0],
+              opacity: [0, 0.15, 0],
               scale: [0, 1, 0],
               rotate: [0, 180, 360]
             }}
@@ -90,7 +87,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
               ease: "easeInOut"
             }}
           >
-            <IconComponent size={24} className="text-slate-300" />
+            <IconComponent size={24} className="text-slate-400 dark:text-slate-500" />
           </motion.div>
         );
       })}
@@ -116,7 +113,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="text-xl lg:text-2xl font-light tracking-wide text-slate-600 mb-8"
+            className="text-xl lg:text-2xl font-light tracking-wide text-slate-700 dark:text-slate-300 mb-8"
           >
             Tu espacio de creatividad infinita
           </motion.p>
@@ -137,7 +134,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
                   animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   exit={{ opacity: 0, y: -15, filter: 'blur(4px)' }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="text-base font-light text-center leading-relaxed text-slate-500"
+                  className="text-base font-light text-center leading-relaxed text-slate-600 dark:text-slate-400"
                 >
                   {loadingPhrases[currentPhrase]}
                 </motion.p>
@@ -147,9 +144,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
             {/* Barra de progreso minimalista */}
             <div className="space-y-3">
               <div className="relative">
-                <div className="w-full h-0.5 bg-slate-200/60 rounded-full overflow-hidden backdrop-blur-sm">
+                <div className="w-full h-0.5 bg-slate-300/60 dark:bg-slate-600/60 rounded-full overflow-hidden backdrop-blur-sm">
                   <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-slate-400 to-slate-600"
+                    className="h-full rounded-full bg-gradient-to-r from-slate-500 to-slate-700 dark:from-slate-400 dark:to-slate-200"
                     initial={{ width: 0, opacity: 0.7 }}
                     animate={{ 
                       width: `${Math.min(progress, 100)}%`,
@@ -164,7 +161,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
                 
                 {/* Indicador de progreso sutil */}
                 <motion.div
-                  className="absolute -top-1 w-2 h-2 bg-slate-500 rounded-full shadow-sm"
+                  className="absolute -top-1 w-2 h-2 bg-slate-600 dark:bg-slate-300 rounded-full shadow-sm"
                   style={{ left: `${Math.min(progress, 100)}%` }}
                   initial={{ scale: 0 }}
                   animate={{ scale: [1, 1.2, 1] }}
@@ -173,8 +170,8 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
               </div>
               
               <motion.p
-                className="text-sm font-light text-center text-slate-400 tracking-wide"
-                animate={{ opacity: [0.5, 0.8, 0.5] }}
+                className="text-sm font-light text-center text-slate-500 dark:text-slate-400 tracking-wide"
+                animate={{ opacity: [0.6, 1, 0.6] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
                 {Math.floor(progress)}%
@@ -196,7 +193,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
           initial={{ opacity: 0 }}
           animate={{
             y: [0, -60],
-            opacity: [0, 0.08, 0],
+            opacity: [0, 0.2, 0],
             scale: [0, 1, 0]
           }}
           transition={{
@@ -207,7 +204,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
             ease: "easeOut"
           }}
         >
-          <div className="w-full h-full bg-slate-400 rounded-full" />
+          <div className="w-full h-full bg-slate-500 dark:bg-slate-400 rounded-full" />
         </motion.div>
       ))}
 
@@ -221,7 +218,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = memo(({ onComplete }) => {
         <motion.div
           className="w-96 h-96 rounded-full"
           style={{ 
-            background: 'radial-gradient(circle, rgba(71, 85, 105, 0.03) 0%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(71, 85, 105, 0.08) 0%, transparent 70%)'
           }}
           animate={{
             scale: [1, 1.1, 1],

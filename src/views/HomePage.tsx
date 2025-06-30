@@ -137,14 +137,14 @@ const HomePage: React.FC = () => {
           className="text-center"
         >
           <div className="mb-4">
-            <h1 className="text-4xl lg:text-6xl font-black mb-2 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-4xl lg:text-6xl font-black mb-2 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 dark:from-gray-200 dark:via-slate-300 dark:to-gray-100 bg-clip-text text-transparent leading-tight">
               Ideas
             </h1>
-            <p className="text-xl lg:text-2xl text-gray-600 font-light">
+            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 font-light">
               para conectar contigo
             </p>
           </div>
-          <p className="text-sm text-gray-500 font-light">
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-light">
             {timeOfDay}{userName && `, ${userName}`} ✨
           </p>
         </motion.div>
@@ -179,52 +179,52 @@ const HomePage: React.FC = () => {
 
         {/* Stats Dashboard */}
         <motion.div variants={isMobile ? staticVariants : itemVariants}>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <TrendingUp size={20} className="mr-2 text-slate-600" />
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <TrendingUp size={20} className="mr-2 text-slate-600 dark:text-slate-400" />
             Tu Progreso
           </h2>
           
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200">
-              <div className="text-2xl font-bold text-slate-700 mb-1">
+            <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200 dark:border-slate-600">
+              <div className="text-2xl font-bold text-slate-700 dark:text-slate-200 mb-1">
                 {diaryEntries?.length || 0}
               </div>
-              <div className="text-xs text-gray-600">Ideas guardadas</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">Ideas guardadas</div>
             </div>
             
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200">
+            <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200 dark:border-slate-600">
               <div className="flex items-center justify-center mb-1">
-                <StreakIcon size={24} className="text-gray-600 mr-1" />
-                <span className="text-2xl font-bold text-slate-700">
+                <StreakIcon size={24} className="text-gray-600 dark:text-gray-300 mr-1" />
+                <span className="text-2xl font-bold text-slate-700 dark:text-slate-200">
                   {userProgress.consecutiveDays}
                 </span>
               </div>
-              <div className="text-xs text-gray-600">Días consecutivos</div>
-              <div className="text-xs mt-1 text-gray-600 font-medium">
+              <div className="text-xs text-gray-600 dark:text-gray-300">Días consecutivos</div>
+              <div className="text-xs mt-1 text-gray-600 dark:text-gray-300 font-medium">
                 {streakInfo.status}
               </div>
             </div>
             
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200">
-              <div className="text-2xl font-bold text-slate-700 mb-1">
+            <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200 dark:border-slate-600">
+              <div className="text-2xl font-bold text-slate-700 dark:text-slate-200 mb-1">
                 {userProgress.categoriesExplored?.length || 0}
               </div>
-              <div className="text-xs text-gray-600">Categorías exploradas</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">Categorías exploradas</div>
             </div>
             
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200">
-              <div className="text-2xl font-bold text-slate-700 mb-1">
+            <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl p-4 text-center border border-gray-200 dark:border-slate-600">
+              <div className="text-2xl font-bold text-slate-700 dark:text-slate-200 mb-1">
                 {userProgress.liberationSessions || 0}
               </div>
-              <div className="text-xs text-gray-600">Liberaciones</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">Liberaciones</div>
             </div>
           </div>
         </motion.div>
 
         {/* Acciones Rápidas */}
         <motion.div variants={isMobile ? staticVariants : itemVariants}>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-            <Zap size={20} className="mr-2 text-gray-600" />
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+            <Zap size={20} className="mr-2 text-gray-600 dark:text-slate-400" />
             Acciones Rápidas
           </h2>
           
@@ -255,13 +255,13 @@ const HomePage: React.FC = () => {
         {getRecentEntries().length > 0 && (
           <motion.div variants={isMobile ? staticVariants : itemVariants}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800 flex items-center">
-                <Clock size={20} className="mr-2 text-slate-600" />
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center">
+                <Clock size={20} className="mr-2 text-slate-600 dark:text-slate-400" />
                 Actividad Reciente
               </h2>
               <motion.button
                 onClick={() => navigate('/diary')}
-                className="text-slate-600 hover:text-slate-700 text-sm font-medium"
+                className="text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200 text-sm font-medium transition-colors"
                 whileHover={isMobile ? {} : { scale: 1.05 }}
               >
                 Ver todo
@@ -272,21 +272,21 @@ const HomePage: React.FC = () => {
               {getRecentEntries().map((entry, index) => (
                 <motion.div
                   key={entry.id}
-                  className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200 hover:border-slate-300 transition-colors cursor-pointer"
+                  className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-4 border border-gray-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 transition-colors cursor-pointer"
                   whileHover={isMobile ? {} : { scale: 1.01 }}
                   onClick={() => navigate('/diary')}
                   variants={isMobile ? staticVariants : itemVariants}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <h3 className="font-medium text-gray-800 text-sm line-clamp-1">
+                      <h3 className="font-medium text-gray-800 dark:text-gray-200 text-sm line-clamp-1">
                         {entry.title}
                       </h3>
-                      <p className="text-gray-600 text-xs mt-1 line-clamp-2">
+                      <p className="text-gray-600 dark:text-gray-300 text-xs mt-1 line-clamp-2">
                         {entry.content}
                       </p>
                     </div>
-                    <div className="text-xs text-gray-500 ml-3 flex-shrink-0">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 ml-3 flex-shrink-0">
                       {formatDate(entry.date)}
                     </div>
                   </div>
@@ -299,12 +299,12 @@ const HomePage: React.FC = () => {
         {/* Mensaje motivacional si no hay actividad */}
         {getRecentEntries().length === 0 && (
           <motion.div variants={isMobile ? staticVariants : itemVariants}>
-            <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-6 text-center border border-gray-200">
-              <Coffee size={48} className="mx-auto text-slate-600 mb-4" />
-              <h3 className="font-semibold text-gray-800 mb-2">
+            <div className="bg-gradient-to-r from-gray-50 to-slate-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 text-center border border-gray-200 dark:border-slate-600">
+              <Coffee size={48} className="mx-auto text-slate-600 dark:text-slate-400 mb-4" />
+              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
                 ¡Tu aventura de escritura comienza aquí!
               </h3>
-              <p className="text-gray-600 text-sm mb-4">
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
                 Cada gran historia comienza con una primera palabra. 
                 ¿Qué tal si empezamos hoy?
               </p>
@@ -313,7 +313,7 @@ const HomePage: React.FC = () => {
                   getRandomPrompt();
                   navigate('/write');
                 }}
-                className="bg-slate-600 hover:bg-slate-700 text-white px-6 py-2 rounded-xl font-medium text-sm transition-colors"
+                className="bg-slate-600 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white px-6 py-2 rounded-xl font-medium text-sm transition-colors"
                 whileHover={isMobile ? {} : { scale: 1.05 }}
                 whileTap={isMobile ? {} : { scale: 0.95 }}
               >

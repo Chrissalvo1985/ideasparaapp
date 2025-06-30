@@ -15,6 +15,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import DarkModeToggle from './DarkModeToggle';
 
 const navigationItems = [
   { path: '/', icon: Home, label: 'Inicio' },
@@ -70,24 +71,24 @@ const Navigation: React.FC = () => {
               />
               
               {/* Menu Content */}
-              <motion.div
+                              <motion.div
                 initial={{ opacity: 0, y: -20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                className="fixed left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 z-[9999] overflow-hidden"
+                className="fixed left-4 right-4 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 dark:border-slate-600/50 z-[9999] overflow-hidden transition-colors duration-300"
                 style={{ 
                   top: `calc(env(safe-area-inset-top, 44px) + 80px)` 
                 }}
               >
                 {/* Menu Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200/50">
-                  <h3 className="text-lg font-semibold text-gray-800">Menú</h3>
+                <div className="flex items-center justify-between p-4 border-b border-gray-200/50 dark:border-slate-600/50">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Menú</h3>
                   <motion.button
                     onClick={closeMenu}
-                    className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                    className="p-2 rounded-full bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
                     whileTap={{ scale: 0.9 }}
                   >
-                    <X size={18} className="text-gray-600" />
+                    <X size={18} className="text-gray-600 dark:text-gray-300" />
                   </motion.button>
                 </div>
                 
@@ -104,7 +105,7 @@ const Navigation: React.FC = () => {
                         className={`flex flex-col items-center justify-center p-4 rounded-xl transition-all duration-200 ${
                           isActive 
                             ? 'bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-lg' 
-                            : 'text-gray-600 hover:text-slate-700 hover:bg-slate-50 active:scale-95'
+                            : 'text-gray-600 dark:text-gray-300 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95'
                         }`}
                         whileTap={{ scale: 0.95 }}
                         whileHover={{ scale: 1.02 }}
@@ -125,7 +126,7 @@ const Navigation: React.FC = () => {
         {/* Bottom Navigation Bar */}
         <div className="mobile-nav-container">
           <div className="max-w-md mx-auto">
-            <div className="mobile-navigation bg-white/95 backdrop-blur-md shadow-2xl border-t border-gray-200">
+            <div className="mobile-navigation bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-2xl border-t border-gray-200 dark:border-slate-600 transition-colors duration-300">
               <div className="flex items-center justify-around p-2">
             {/* Main Navigation Items */}
             {mainNavItems.map((item) => {
@@ -139,7 +140,7 @@ const Navigation: React.FC = () => {
                   className={`flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 min-h-[60px] min-w-[60px] ${
                     isActive 
                       ? 'bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-lg scale-105' 
-                      : 'text-gray-500 hover:text-slate-600 hover:bg-slate-50 active:scale-95'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95'
                   }`}
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: isActive ? 1.05 : 1.02 }}
@@ -159,7 +160,7 @@ const Navigation: React.FC = () => {
               className={`flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 min-h-[60px] min-w-[60px] ${
                 isMenuOpen
                   ? 'bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-lg scale-105'
-                  : 'text-gray-500 hover:text-slate-600 hover:bg-slate-50 active:scale-95'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 active:scale-95'
               }`}
               whileTap={{ scale: 0.9 }}
               whileHover={{ scale: 1.02 }}
@@ -189,8 +190,8 @@ const Navigation: React.FC = () => {
                   onClick={() => navigate(item.path)}
                   className={`group flex gap-x-3 rounded-xl p-3 text-sm leading-6 font-semibold w-full text-left relative overflow-hidden transition-all duration-200 ${
                     isActive
-                      ? 'text-slate-700'
-                      : 'text-gray-700 hover:text-slate-700 hover:bg-slate-50'
+                      ? 'text-slate-700 dark:text-slate-300'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}

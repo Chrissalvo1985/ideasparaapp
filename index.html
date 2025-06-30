@@ -49,6 +49,28 @@
     
     <title>Ideas para App</title>
     
+    <!-- Script crítico para evitar flash de modo claro -->
+    <script>
+      (function() {
+        try {
+          const savedDarkMode = localStorage.getItem('ideas-app-dark-mode');
+          if (savedDarkMode === 'true') {
+            document.documentElement.classList.add('dark');
+          } else if (savedDarkMode === null) {
+            // Primera visita: usar modo claro como default (sin consultar sistema)
+            const useSystemPreference = false; // Cambiar a true si quieres detectar sistema solo la primera vez
+            const defaultDark = useSystemPreference ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
+            if (defaultDark) {
+              document.documentElement.classList.add('dark');
+            }
+            localStorage.setItem('ideas-app-dark-mode', defaultDark.toString());
+          }
+        } catch (e) {
+          // Fallback silencioso si hay error con localStorage
+        }
+      })();
+    </script>
+    
     <style>
       /* CRITICAL: Safari/Edge compatible mobile optimizations */
       :root {
@@ -77,6 +99,11 @@
         min-height: calc(var(--vh, 1vh) * 100);
         background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         overflow-x: hidden;
+      }
+      
+      /* Dark mode background */
+      .dark #root {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       }
       
       /* Safari/Edge Mobile Specific Optimizations */

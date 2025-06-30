@@ -90,7 +90,7 @@ const WritingSpace: React.FC = () => {
   const selectedEmotionData = emotions.find(e => e.id === selectedEmotion);
 
   return (
-    <div className="min-h-screen px-4 lg:px-8 pt-4 lg:pt-8 pb-16 lg:pb-8 max-w-4xl lg:mx-auto bg-gradient-to-br from-gray-50/30 via-slate-50/20 to-stone-50/30">
+    <div className="min-h-screen px-4 lg:px-8 pt-4 lg:pt-8 pb-16 lg:pb-8 max-w-4xl lg:mx-auto bg-gradient-to-br from-gray-50/30 via-slate-50/20 to-stone-50/30 dark:from-slate-900/30 dark:via-slate-800/20 dark:to-gray-900/30">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -100,19 +100,19 @@ const WritingSpace: React.FC = () => {
         <div className="flex items-center justify-between">
           <motion.button
             onClick={() => navigate(-1)}
-            className="p-2.5 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200 shadow-sm hover:bg-white transition-colors"
+            className="p-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200 dark:border-slate-600 shadow-sm hover:bg-white dark:hover:bg-slate-700 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ArrowLeft size={20} className="text-slate-600" />
+            <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
           </motion.button>
           
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-slate-500 font-medium">{wordCount} palabras</span>
+            <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">{wordCount} palabras</span>
             {writingContent.trim() && (
               <motion.button
                 onClick={handleSave}
-                className="px-4 py-2 bg-slate-600 text-white rounded-full text-sm font-medium shadow-sm hover:bg-slate-700 transition-colors"
+                className="px-4 py-2 bg-slate-600 dark:bg-slate-700 text-white rounded-full text-sm font-medium shadow-sm hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -136,12 +136,12 @@ const WritingSpace: React.FC = () => {
           />
           <motion.button
             onClick={handleNewInspiration}
-            className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-sm rounded-full border border-slate-200 shadow-sm hover:bg-white transition-colors"
+            className="absolute top-4 right-4 p-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-full border border-slate-200 dark:border-slate-600 shadow-sm hover:bg-white dark:hover:bg-slate-700 transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             title="Nueva inspiración"
           >
-            <Shuffle size={14} className="text-slate-600" />
+            <Shuffle size={14} className="text-slate-600 dark:text-slate-300" />
           </motion.button>
         </motion.div>
 
@@ -152,7 +152,7 @@ const WritingSpace: React.FC = () => {
             animate={{ opacity: 1 }}
             className="text-center mb-6"
           >
-            <p className="text-slate-600 text-sm italic font-light">
+            <p className="text-slate-600 dark:text-slate-300 text-sm italic font-light">
               {currentPrompt.text}
             </p>
           </motion.div>
@@ -163,7 +163,7 @@ const WritingSpace: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-200/50 overflow-hidden shadow-sm"
+          className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-slate-600/50 overflow-hidden shadow-sm"
           style={{
             boxShadow: '0 8px 32px rgba(100, 116, 139, 0.08)'
           }}
@@ -174,7 +174,7 @@ const WritingSpace: React.FC = () => {
             placeholder="Título de tu escrito (opcional)"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-4 lg:p-5 bg-transparent border-b border-gray-200/60 focus:outline-none focus:border-slate-300 placeholder-gray-400 font-medium text-slate-700 transition-colors"
+            className="w-full p-4 lg:p-5 bg-transparent border-b border-gray-200/60 dark:border-slate-600/60 focus:outline-none focus:border-slate-300 dark:focus:border-slate-500 placeholder-gray-400 dark:placeholder-slate-500 font-medium text-slate-700 dark:text-slate-200 transition-colors"
           />
           
           {/* Text Area */}
@@ -186,7 +186,7 @@ const WritingSpace: React.FC = () => {
             }
             value={writingContent}
             onChange={(e) => setWritingContent(e.target.value)}
-            className="w-full h-72 lg:h-96 p-4 lg:p-6 bg-transparent resize-none focus:outline-none placeholder-gray-400 leading-relaxed text-sm lg:text-base text-slate-700"
+            className="w-full h-72 lg:h-96 p-4 lg:p-6 bg-transparent resize-none focus:outline-none placeholder-gray-400 dark:placeholder-slate-500 leading-relaxed text-sm lg:text-base text-slate-700 dark:text-slate-200"
             style={{ 
               minHeight: '400px',
               fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif'
@@ -203,7 +203,7 @@ const WritingSpace: React.FC = () => {
           >
             <motion.button
               onClick={() => setShowSaveOptions(true)}
-              className="px-6 py-3 bg-slate-600 text-white rounded-full font-medium shadow-lg hover:bg-slate-700 transition-colors"
+              className="px-6 py-3 bg-slate-600 dark:bg-slate-700 text-white rounded-full font-medium shadow-lg hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -218,11 +218,11 @@ const WritingSpace: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4 bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50"
+            className="space-y-4 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-slate-600/50"
           >
             <motion.button
               onClick={() => setShowSaveOptions(!showSaveOptions)}
-              className="w-full bg-purple-100 text-purple-700 rounded-xl p-3 flex items-center justify-center space-x-2 font-medium"
+              className="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl p-3 flex items-center justify-center space-x-2 font-medium"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -234,11 +234,11 @@ const WritingSpace: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-purple-100 space-y-4"
+                className="bg-white/60 dark:bg-slate-700/60 backdrop-blur-sm rounded-xl p-4 border border-gray-100 dark:border-slate-600 space-y-4"
               >
                 {/* Emotion Selector */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     ¿Cómo te sientes?
                   </label>
                   <div className="grid grid-cols-5 gap-2">
@@ -248,8 +248,8 @@ const WritingSpace: React.FC = () => {
                         onClick={() => setSelectedEmotion(emotion.id)}
                         className={`p-2 rounded-lg border transition-colors ${
                           selectedEmotion === emotion.id
-                            ? 'border-purple-300 bg-purple-50'
-                            : 'border-gray-200 bg-white/50'
+                            ? 'border-slate-300 dark:border-slate-500 bg-slate-50 dark:bg-slate-600'
+                            : 'border-gray-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50'
                         }`}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -260,7 +260,7 @@ const WritingSpace: React.FC = () => {
                     ))}
                   </div>
                   {selectedEmotionData && (
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                       {selectedEmotionData.name}: {selectedEmotionData.description}
                     </p>
                   )}
@@ -269,15 +269,15 @@ const WritingSpace: React.FC = () => {
                 {/* Privacy Toggle */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    {isPrivate ? <EyeOff size={18} /> : <Eye size={18} />}
-                    <span className="text-sm font-medium">
+                    {isPrivate ? <EyeOff size={18} className="text-slate-600 dark:text-slate-400" /> : <Eye size={18} className="text-slate-600 dark:text-slate-400" />}
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {isPrivate ? 'Entrada privada' : 'Entrada visible'}
                     </span>
                   </div>
                   <motion.button
                     onClick={() => setIsPrivate(!isPrivate)}
                     className={`w-12 h-6 rounded-full transition-colors ${
-                      isPrivate ? 'bg-purple-500' : 'bg-gray-300'
+                      isPrivate ? 'bg-slate-500 dark:bg-slate-600' : 'bg-gray-300 dark:bg-slate-700'
                     }`}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -291,7 +291,7 @@ const WritingSpace: React.FC = () => {
 
                 {/* Tags */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Etiquetas (opcional)
                   </label>
                   <div className="flex flex-wrap gap-2 mb-2">
@@ -300,12 +300,12 @@ const WritingSpace: React.FC = () => {
                         key={tag}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-sm flex items-center space-x-1"
+                        className="bg-slate-100 dark:bg-slate-600 text-slate-700 dark:text-slate-200 px-2 py-1 rounded-full text-sm flex items-center space-x-1"
                       >
                         <span>{tag}</span>
                         <button
                           onClick={() => removeTag(tag)}
-                          className="text-purple-500 hover:text-purple-700"
+                          className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                         >
                           ×
                         </button>
@@ -318,14 +318,14 @@ const WritingSpace: React.FC = () => {
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleAddTag}
-                    className="w-full p-2 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-300"
+                    className="w-full p-2 border border-gray-200 dark:border-slate-600 rounded-lg focus:outline-none focus:border-slate-300 dark:focus:border-slate-500 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-slate-500"
                   />
                 </div>
 
                 {/* Save Button */}
                 <motion.button
                   onClick={handleSave}
-                  className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-3 font-medium"
+                  className="w-full bg-gradient-to-r from-slate-500 to-slate-600 dark:from-slate-600 dark:to-slate-700 text-white rounded-xl p-3 font-medium"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

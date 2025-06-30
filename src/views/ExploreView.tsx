@@ -88,20 +88,20 @@ const ExploreView: React.FC = () => {
           <motion.div variants={itemVariants}>
             <button
               onClick={() => navigate('/')}
-              className="flex items-center text-gray-600 hover:text-gray-800 mb-4"
+              className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 mb-4 transition-colors"
             >
               <ArrowLeft size={20} className="mr-2" />
               Volver
             </button>
             
             <div className="text-center mb-6 lg:mb-8">
-              <h1 className="text-3xl lg:text-6xl font-black mb-3 lg:mb-4 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 bg-clip-text text-transparent leading-tight">
+              <h1 className="text-3xl lg:text-6xl font-black mb-3 lg:mb-4 bg-gradient-to-r from-gray-700 via-slate-600 to-gray-800 dark:from-gray-200 dark:via-slate-300 dark:to-gray-100 bg-clip-text text-transparent leading-tight">
                 Ideas
               </h1>
-              <p className="text-lg lg:text-2xl text-gray-600 font-light">
+              <p className="text-lg lg:text-2xl text-gray-600 dark:text-gray-300 font-light">
                 para explorar
               </p>
-              <p className="text-sm text-gray-500 mt-3 lg:mt-4 font-light">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 lg:mt-4 font-light">
                 Elige una categoría para comenzar a explorar ideas específicas
               </p>
             </div>
@@ -115,7 +115,7 @@ const ExploreView: React.FC = () => {
                   <motion.button
                     key={category.id}
                     onClick={() => handleCategorySelect(category.id)}
-                    className="rounded-3xl p-6 lg:p-10 text-left shadow-2xl relative overflow-hidden group border border-gray-400"
+                    className="rounded-3xl p-6 lg:p-10 text-left shadow-2xl relative overflow-hidden group border border-gray-400 dark:border-gray-600"
                     style={{
                       background: `
                         linear-gradient(135deg, 
@@ -148,10 +148,10 @@ const ExploreView: React.FC = () => {
                       
                       {/* Subtitle with better contrast */}
                       <div className="space-y-1 lg:space-y-2 mb-4 lg:mb-6">
-                        <p className="text-base lg:text-xl text-gray-200 font-light">
+                        <p className="text-base lg:text-xl text-gray-100 font-light">
                           {category.title.replace('Ideas para', 'para').toLowerCase()}
                         </p>
-                        <p className="text-xs lg:text-sm text-gray-300 font-light">
+                        <p className="text-xs lg:text-sm text-gray-200 font-light">
                           {category.prompts.length} ideas disponibles
                         </p>
                       </div>
@@ -176,10 +176,10 @@ const ExploreView: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <p className="text-gray-500">Categoría no encontrada</p>
+          <p className="text-gray-500 dark:text-gray-400">Categoría no encontrada</p>
           <button 
             onClick={() => navigate('/explore')}
-            className="text-slate-600 hover:text-slate-700 mt-2"
+            className="text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 mt-2 transition-colors"
           >
             Elegir categoría
           </button>
@@ -198,17 +198,18 @@ const ExploreView: React.FC = () => {
   const handleStartWriting = () => {
     if (selectedPrompt) {
       setCurrentPrompt(selectedPrompt);
-    } else {
-      setCurrentPrompt(null);
+      navigate('/write');
     }
-    navigate('/write');
   };
 
   const handleRandomPrompt = () => {
-    const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    setSelectedPrompt(randomPrompt);
-    setCurrentPrompt(randomPrompt);
+    getRandomPrompt(currentCategory || undefined);
+    navigate('/write');
   };
+
+  const progress = categoryProgress[currentCategory] || 0;
+  const totalPrompts = prompts.length;
+  const progressPercentage = totalPrompts > 0 ? Math.round((progress / totalPrompts) * 100) : 0;
 
   return (
     <div className="px-4 lg:px-8 pt-4 lg:pt-8 pb-16 lg:pb-8 max-w-4xl lg:mx-auto">
@@ -216,124 +217,151 @@ const ExploreView: React.FC = () => {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="space-y-4 lg:space-y-6"
+        className="space-y-6"
       >
         {/* Header */}
         <motion.div variants={itemVariants}>
-          <div className="flex items-center space-x-4 mb-4">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center text-gray-600 hover:text-gray-800"
-            >
-              <ArrowLeft size={20} className="mr-2" />
-              Inicio
-            </button>
-            <span className="text-gray-400">•</span>
-            <button
-              onClick={() => setCurrentCategory('')}
-              className="flex items-center text-slate-600 hover:text-slate-700"
-            >
-              <Compass size={20} className="mr-2" />
-              Ver todas las categorías
-            </button>
-          </div>
+          <button
+            onClick={() => setCurrentCategory('')}
+            className="flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 mb-4 transition-colors"
+          >
+            <ArrowLeft size={20} className="mr-2" />
+            Volver a categorías
+          </button>
           
-          <div className={`bg-gradient-to-br ${category.gradient} rounded-2xl p-6 text-white mb-6`}>
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/20 p-3 rounded-full">
+          <div className="text-center mb-6 lg:mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <div className={`p-4 rounded-3xl bg-gradient-to-br ${getCategoryColor(currentCategory)} text-white shadow-lg`}>
                 <Icon size={32} />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold">{category.title}</h1>
-                <p className="text-white/80">{category.description}</p>
+            </div>
+            
+            <h1 className="text-2xl lg:text-4xl font-black mb-2 text-gray-800 dark:text-gray-200">
+              {category.name}
+            </h1>
+            <p className="text-base lg:text-xl text-gray-600 dark:text-gray-300 font-light mb-4">
+              {category.title.replace('Ideas para', 'para').toLowerCase()}
+            </p>
+            
+            {/* Progress */}
+            <div className="max-w-md mx-auto">
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 mb-2">
+                <span>Progreso</span>
+                <span>{progress}/{totalPrompts} ({progressPercentage}%)</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-slate-600 to-gray-700 dark:from-slate-500 dark:to-slate-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progressPercentage}%` }}
+                />
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Prompts Section */}
+        {/* Quick Actions */}
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <motion.button
+            onClick={handleRandomPrompt}
+            className="p-4 bg-gradient-to-r from-slate-600 to-gray-700 dark:from-slate-700 dark:to-gray-800 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="flex items-center space-x-3">
+              <Shuffle size={24} />
+              <div className="text-left">
+                <h3 className="font-bold">Sorpréndeme</h3>
+                <p className="text-sm text-white/90">Prompt aleatorio de esta categoría</p>
+              </div>
+            </div>
+          </motion.button>
+
+          <motion.button
+            onClick={() => navigate('/write')}
+            className="p-4 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200 dark:border-slate-600 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="flex items-center space-x-3">
+              <Edit3 size={24} className="text-slate-600 dark:text-slate-400" />
+              <div className="text-left">
+                <h3 className="font-bold text-gray-800 dark:text-gray-200">Escritura libre</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Sin prompts, solo tú y tus ideas</p>
+              </div>
+            </div>
+          </motion.button>
+        </motion.div>
+
+        {/* Prompts Selection */}
         <motion.div variants={itemVariants}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-800 flex items-center">
-              <Lightbulb size={20} className="mr-2 text-slate-600" />
-              Ideas para empezar
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              Ideas para explorar
             </h2>
-            <motion.button
-              onClick={handleRandomPrompt}
-              className="flex items-center text-slate-600 hover:text-slate-700 text-sm"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Shuffle size={16} className="mr-1" />
-              Aleatorio
-            </motion.button>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {prompts.length} prompts disponibles
+            </span>
           </div>
 
-          <div className="grid gap-3">
+          <div className="grid gap-4">
             {prompts.map((prompt, index) => (
-              <motion.button
-                key={index}
-                onClick={() => handlePromptSelect(prompt)}
-                className={`text-left p-4 rounded-xl border-2 transition-all ${
+              <motion.div
+                key={`${currentCategory}-prompt-${index}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className={`p-4 rounded-xl border-2 transition-all cursor-pointer ${
                   selectedPrompt === prompt
-                    ? `border-${category.color}-400 bg-${category.color}-50`
-                    : 'border-gray-200 bg-white/60 hover:border-gray-300 hover:bg-white/80'
+                    ? 'border-slate-400 dark:border-slate-500 bg-slate-50 dark:bg-slate-800 shadow-lg'
+                    : 'border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-slate-800/60 hover:bg-white/80 dark:hover:bg-slate-800/80 hover:border-gray-300 dark:hover:border-gray-500'
                 }`}
+                onClick={() => handlePromptSelect(prompt)}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                variants={itemVariants}
               >
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700 font-medium">{prompt}</p>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <p className="text-gray-800 dark:text-white leading-relaxed mb-2">
+                      {prompt}
+                    </p>
+                  </div>
+                  
                   {selectedPrompt === prompt && (
-                    <Target size={16} className={`text-${category.color}-600`} />
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="ml-3 p-2 bg-slate-600 dark:bg-slate-700 text-white rounded-full"
+                    >
+                      <Target size={16} />
+                    </motion.div>
                   )}
                 </div>
-              </motion.button>
+              </motion.div>
             ))}
           </div>
         </motion.div>
 
-        {/* Action Buttons */}
-        <motion.div variants={itemVariants} className="space-y-3">
-          <motion.button
-            onClick={handleStartWriting}
-            className={`w-full bg-gradient-to-r ${category.gradient} text-white font-semibold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center space-x-2`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+        {/* Start Writing Button */}
+        {selectedPrompt && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="fixed bottom-20 lg:bottom-8 left-1/2 transform -translate-x-1/2 z-10"
           >
-            <Edit3 size={20} />
-            <span>
-              {selectedPrompt ? 'Escribir sobre esta idea' : 'Escritura libre'}
-            </span>
-          </motion.button>
-
-          <motion.button
-            onClick={() => {
-              getRandomPrompt();
-              navigate('/write');
-            }}
-            className="w-full bg-white/60 backdrop-blur-sm text-gray-700 font-semibold py-4 px-6 rounded-xl border border-gray-200 hover:bg-white/80 flex items-center justify-center space-x-2"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Sparkles size={20} />
-            <span>Sorpréndeme</span>
-          </motion.button>
-        </motion.div>
-
-        {/* Tips Section */}
-        <motion.div variants={itemVariants}>
-          <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-            <h3 className="font-semibold text-gray-800 mb-2">💡 Consejos</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• No te preocupes por la perfección, solo escribe</li>
-              <li>• Usa estos prompts como punto de partida</li>
-              <li>• Déjate llevar por tus pensamientos</li>
-              <li>• No hay respuestas correctas o incorrectas</li>
-            </ul>
-          </div>
-        </motion.div>
+            <motion.button
+              onClick={handleStartWriting}
+              className="px-8 py-4 bg-gradient-to-r from-slate-600 to-gray-700 dark:from-slate-700 dark:to-gray-800 text-white rounded-2xl shadow-2xl font-bold text-lg"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="flex items-center space-x-3">
+                <Edit3 size={24} />
+                <span>Comenzar a escribir</span>
+                <ArrowRight size={20} />
+              </div>
+            </motion.button>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );

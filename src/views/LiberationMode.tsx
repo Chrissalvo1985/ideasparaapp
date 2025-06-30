@@ -108,8 +108,8 @@ const LiberationMode: React.FC = () => {
             <ArrowLeft size={20} className="text-slate-600" />
           </motion.button>
           <div>
-            <h1 className="text-xl font-bold text-gray-800">Modo Liberación</h1>
-            <p className="text-sm text-gray-600">
+            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Modo Liberación</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               Suelta lo que ya no necesitas llevar
             </p>
           </div>
@@ -128,17 +128,17 @@ const LiberationMode: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-r from-slate-50 to-stone-50 rounded-2xl p-6 border border-slate-200"
+                className="bg-gradient-to-r from-slate-50 to-stone-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl p-6 border border-slate-200 dark:border-slate-600"
               >
                 <div className="flex items-start space-x-3">
-                  <div className="bg-slate-100 p-2 rounded-full flex-shrink-0">
-                    <Flame size={16} className="text-slate-600" />
+                  <div className="bg-slate-100 dark:bg-slate-600 p-2 rounded-full flex-shrink-0">
+                    <Flame size={16} className="text-slate-600 dark:text-slate-300" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 mb-2">
+                    <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-2">
                       Un espacio sagrado para soltar
                     </h3>
-                    <p className="text-gray-700 text-sm leading-relaxed">
+                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                       Escribe aquí lo que quieres liberar: una emoción, un pensamiento, 
                       una experiencia que ya no te sirve. Después, elige cómo quieres 
                       soltarlo simbólicamente.
@@ -153,7 +153,7 @@ const LiberationMode: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <label className="block text-sm font-medium text-gray-700 mb-3">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-3">
                   ¿Qué emoción quieres liberar?
                 </label>
                 <div className="grid grid-cols-5 gap-2">
@@ -163,15 +163,15 @@ const LiberationMode: React.FC = () => {
                       onClick={() => setSelectedEmotion(emotion.id)}
                       className={`p-3 rounded-xl border transition-all ${
                         selectedEmotion === emotion.id
-                          ? 'border-slate-400 bg-slate-100 scale-105'
-                          : 'border-gray-200 bg-white/50 hover:bg-white/80'
+                          ? 'border-slate-400 dark:border-slate-500 bg-slate-100 dark:bg-slate-700 scale-105'
+                          : 'border-gray-200 dark:border-slate-600 bg-white/50 dark:bg-slate-800/50 hover:bg-white/80 dark:hover:bg-slate-700/80'
                       }`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       title={emotion.name}
                     >
                       <span className="text-2xl block">{emotion.icon}</span>
-                      <span className="text-xs text-gray-600 mt-1 block">
+                      <span className="text-xs text-gray-600 dark:text-gray-300 mt-1 block">
                         {emotion.name}
                       </span>
                     </motion.button>
@@ -184,13 +184,13 @@ const LiberationMode: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200 overflow-hidden"
+                className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-2xl border border-slate-200 dark:border-slate-600 overflow-hidden"
               >
                 <textarea
                   placeholder="Escribe aquí lo que quieres soltar... Puede ser una carta a alguien, un miedo, un dolor, una situación que te pesa. Déjalo fluir sin censura."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full h-48 p-4 bg-transparent resize-none focus:outline-none placeholder-gray-500 leading-relaxed"
+                  className="w-full h-48 p-4 bg-transparent resize-none focus:outline-none placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 leading-relaxed"
                 />
               </motion.div>
 

@@ -10,6 +10,7 @@ import { initializeMockData } from '../data/mockData';
 
 interface AppStore {
   // State
+  isDarkMode: boolean;
   currentEmotion: Emotion | null;
   currentPrompt: WritingPrompt | null;
   diaryEntries: DiaryEntry[];
@@ -33,6 +34,8 @@ interface AppStore {
   communitySettings: CommunitySettings;
 
   // Actions
+  toggleDarkMode: () => void;
+  setDarkMode: (isDark: boolean) => void;
   setCurrentEmotion: (emotion: Emotion | null) => void;
   setCurrentPrompt: (prompt: WritingPrompt | null) => void;
   getRandomPrompt: (category?: string) => WritingPrompt | null;
@@ -81,6 +84,7 @@ export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
       // Initial state
+      isDarkMode: false, // Default siempre false, se inicializa en initializeStore
       currentEmotion: null,
       currentPrompt: null,
       diaryEntries: [],
@@ -124,6 +128,15 @@ export const useAppStore = create<AppStore>()(
       },
 
       // Actions
+      toggleDarkMode: () => {
+        const isDark = !get().isDarkMode;
+        set({ isDarkMode: isDark });
+      },
+      
+      setDarkMode: (isDark) => {
+        set({ isDarkMode: isDark });
+      },
+      
       setCurrentEmotion: (emotion) => set({ currentEmotion: emotion }),
       
       setCurrentPrompt: (prompt) => set({ currentPrompt: prompt }),
@@ -543,22 +556,48 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: 'ideas-para-app-storage',
-      version: 5, // Incrementado para forzar rehidratación
+      version: 6, // Incrementado para incluir dark mode en persist
       onRehydrateStorage: () => (state) => {
         console.log('🔄 Hidratando store desde localStorage');
         if (state) {
           console.log('📊 Entradas cargadas:', state.diaryEntries?.length || 0);
           console.log('🧠 ConciencIA settings:', state.concienciaSettings);
+          console.log('🌙 Dark mode hidratado:', state.isDarkMode);
+          
+          // Aplicar dark mode inmediatamente después de hidratar
+          if (typeof window !== 'undefined') {
+            if (state.isDarkMode) {
+              document.documentElement.classList.add('dark');
+              document.documentElement.style.colorScheme = 'dark';
+            } else {
+              document.documentElement.classList.remove('dark');
+              document.documentElement.style.colorScheme = 'light';
+            }
+          }
         }
       },
       // Migración para mantener datos existentes
       migrate: (persistedState: any, version: number) => {
         console.log('🔄 Migrando store desde versión', version);
         
-        if (version < 5) {
-          // Asegurar que concienciaSettings y communitySettings existen
+        if (version < 6) {
+          // Migrar dark mode del localStorage separado al store
+          let isDarkMode = false;
+          try {
+            const oldDarkMode = localStorage.getItem('ideas-app-dark-mode');
+            if (oldDarkMode !== null) {
+              isDarkMode = oldDarkMode === 'true';
+              // Limpiar el valor viejo
+              localStorage.removeItem('ideas-app-dark-mode');
+            }
+          } catch (error) {
+            console.log('No se pudo migrar dark mode:', error);
+          }
+          
+          // Asegurar que todos los settings existen
           return {
             ...persistedState,
+            isDarkMode, // Migrar dark mode al store
             concienciaSettings: persistedState.concienciaSettings || {
               personality: 'empathetic',
               responseStyle: 'detailed',
