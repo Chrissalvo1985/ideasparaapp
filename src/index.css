@@ -175,33 +175,36 @@
   @media (display-mode: standalone) {
     html, body {
       height: 100vh;
+      height: 100dvh;
       height: -webkit-fill-available;
       overflow: hidden;
     }
     
     #root {
       height: 100vh;
+      height: 100dvh;
       height: -webkit-fill-available;
     }
     
-    /* Ensure bottom navigation respects safe areas in PWA */
-    .pwa-bottom-safe {
-      padding-bottom: env(safe-area-inset-bottom, 0) !important;
-    }
-    
-    /* Force fixed elements to stick to viewport edges in PWA */
+    /* Force fixed elements to edges and apply safe areas correctly */
     .fixed {
       position: fixed !important;
     }
+    
+    /* PWA navigation specific - force to bottom with safe area */
+    .pwa-bottom-safe {
+      bottom: 0 !important;
+      padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    }
+    
+    /* Override mobile navigation padding in PWA */
+    .mobile-navigation {
+      padding-bottom: 0 !important;
+    }
   }
   
-  /* Mobile navigation spacing */
+  /* Mobile navigation spacing - only for browser mode */
   .mobile-navigation {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-  
-  /* PWA specific navigation spacing */
-  .pwa-bottom-safe {
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   
