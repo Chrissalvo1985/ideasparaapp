@@ -186,6 +186,25 @@
       height: -webkit-fill-available;
     }
     
+    /* CRITICAL: PWA Navigation positioning - HIGHEST priority */
+    .mobile-nav-container {
+      position: fixed !important;
+      bottom: env(safe-area-inset-bottom, 0px) !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 9999 !important;
+      background: transparent !important;
+      transform: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Navigation bar styling in PWA */
+    .mobile-navigation {
+      margin-bottom: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    
     /* Mobile header in PWA */
     .mobile-header {
       padding-top: env(safe-area-inset-top, 0);
@@ -197,22 +216,6 @@
       height: 100dvh;
       height: -webkit-fill-available;
       padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
-    }
-    
-    /* Force navigation to bottom in PWA with safe area */
-    .mobile-nav-container {
-      position: fixed !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      z-index: 50 !important;
-      background: transparent;
-    }
-    
-    /* Navigation bar styling in PWA */
-    .mobile-navigation {
-      padding-bottom: env(safe-area-inset-bottom, 0) !important;
-      margin-bottom: 0 !important;
     }
     
     /* Ensure content doesn't overlap with navigation */
@@ -229,37 +232,22 @@
     }
     
     .mobile-nav-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 9999 !important;
+      background: transparent !important;
+      transform: none !important;
     }
     
     .mobile-navigation {
-      padding-bottom: env(safe-area-inset-bottom, 0);
+      padding-bottom: env(safe-area-inset-bottom, 0) !important;
+      margin-bottom: 0 !important;
     }
     
     body {
       padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
-    }
-  }
-  
-  /* iOS specific fixes */
-  @supports (-webkit-touch-callout: none) {
-    .mobile-nav-container {
-      padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
-    
-    @media (display-mode: standalone) {
-      .mobile-nav-container {
-        bottom: 0 !important;
-      }
-      
-      body, #root {
-        overflow-x: hidden;
-        position: relative;
-      }
     }
   }
   
@@ -274,6 +262,32 @@
     min-height: calc(100vh - 200px);
   }
   
+  /* CRITICAL: iPhone PWA specific fixes */
+  @supports (-webkit-touch-callout: none) {
+    @media (display-mode: standalone) {
+      .mobile-nav-container {
+        /* Force absolute bottom positioning on iPhone PWA */
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 99999 !important;
+        /* Override any transforms or translations */
+        transform: translateZ(0) !important;
+        -webkit-transform: translateZ(0) !important;
+        /* Force hardware acceleration */
+        will-change: transform !important;
+        backface-visibility: hidden !important;
+        -webkit-backface-visibility: hidden !important;
+      }
+      
+      .mobile-navigation {
+        /* Add extra padding for iPhone home indicator */
+        padding-bottom: max(env(safe-area-inset-bottom, 0), 20px) !important;
+      }
+    }
+  }
+
   /* Desktop layout improvements */
   @media (min-width: 1024px) {
     html {
@@ -352,6 +366,13 @@
     animation: none !important;
     transform: none !important;
     will-change: auto !important;
+  }
+  
+  /* CRITICAL: Prevent navigation interference */
+  .mobile-nav-container {
+    /* Force stacking context and prevent interference */
+    isolation: isolate !important;
+    contain: layout style paint !important;
   }
   
   /* Essential mobile interactions only */

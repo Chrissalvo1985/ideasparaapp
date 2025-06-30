@@ -168,19 +168,16 @@
           backface-visibility: hidden;
         }
         
-        /* Critical PWA navigation positioning */
+        /* PWA viewport fixes only */
         @media (display-mode: standalone) {
-          .mobile-nav-container {
-            position: fixed !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            z-index: 9999 !important;
-            transform: none !important;
+          html, body {
+            height: 100vh !important;
+            height: 100dvh !important;
           }
           
-          .mobile-navigation {
-            padding-bottom: env(safe-area-inset-bottom, 0) !important;
+          #root {
+            height: 100vh !important;
+            height: 100dvh !important;
           }
         }
       }

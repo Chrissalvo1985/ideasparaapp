@@ -120,7 +120,7 @@ const Navigation: React.FC = () => {
         </AnimatePresence>
 
         {/* Bottom Navigation Bar */}
-        <div className="mobile-nav-container fixed bottom-0 left-0 right-0 z-50">
+        <div className="mobile-nav-container">
           <div className="max-w-md mx-auto">
             <div className="mobile-navigation bg-white/95 backdrop-blur-md shadow-2xl border-t border-gray-200">
               <div className="flex items-center justify-around p-2">
