@@ -231,7 +231,7 @@
       height: calc(100dvh - env(safe-area-inset-top, 0)) !important;
       margin-top: 0 !important;
       padding-top: 0 !important;
-      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
+      padding-bottom: 0 !important;
       position: relative !important;
       overflow: hidden !important;
       /* Remove backgrounds that create visual artifacts */
@@ -239,9 +239,16 @@
       box-shadow: none !important;
     }
     
-    /* Ensure content doesn't overlap with navigation */
+    /* Content inner div gets the padding to avoid navbar overlap */
+    .mobile-content > div {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
+      min-height: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Body should not have padding - it's handled by content containers */
     body {
-      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+      padding-bottom: 0 !important;
     }
   }
   
@@ -249,10 +256,17 @@
   @media not all and (display-mode: standalone) {
     .mobile-content {
       min-height: 100vh;
-      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+      padding-bottom: 0 !important;
       /* Remove backgrounds that create visual artifacts */
       background: transparent !important;
       box-shadow: none !important;
+    }
+    
+    /* Content inner div gets the padding to avoid navbar overlap */
+    .mobile-content > div {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
+      min-height: 100vh !important;
+      box-sizing: border-box !important;
     }
     
     .mobile-nav-container {
@@ -271,7 +285,7 @@
     }
     
     body {
-      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+      padding-bottom: 0 !important;
     }
   }
   
@@ -328,10 +342,18 @@
         /* Content should start right after header */
         margin-top: 0 !important;
         padding-top: 0 !important;
-        height: calc(100vh - env(safe-area-inset-top, 44px) - 80px - env(safe-area-inset-bottom, 0)) !important;
+        padding-bottom: 0 !important;
+        height: calc(100vh - env(safe-area-inset-top, 44px) - env(safe-area-inset-bottom, 0)) !important;
         /* Remove any background that creates double header effect */
         background: transparent !important;
         box-shadow: none !important;
+      }
+      
+      /* Content inner div gets the padding for iPhone PWA */
+      .mobile-content > div {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
+        min-height: 100% !important;
+        box-sizing: border-box !important;
       }
       
       .mobile-nav-container {

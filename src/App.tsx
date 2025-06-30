@@ -80,7 +80,7 @@ function App() {
               {/* Content Container */}
               <div className="mobile-content h-screen max-w-md mx-auto">
                 {/* Content with proper spacing */}
-                <div className="pt-16 pb-20 overflow-y-auto h-full bg-gradient-to-br from-gray-50 via-slate-50 to-stone-50">
+                <div className="pt-16 overflow-y-auto h-full bg-gradient-to-br from-gray-50 via-slate-50 to-stone-50">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/explore" element={<ExploreView />} />
