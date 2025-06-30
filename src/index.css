@@ -190,31 +190,7 @@
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   
-  /* Mobile scroll container optimization */
-  .mobile-scroll-container {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-  }
-  
-  /* Header auto-hide animation */
-  .mobile-header {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* Ensure proper stacking for mobile fixed elements */
-  @media (max-width: 1023px) {
-    .mobile-header {
-      z-index: 30;
-    }
-    
-    .mobile-navigation {
-      z-index: 20;
-    }
-    
-    .mobile-content {
-      z-index: 10;
-    }
-  }
+
   
   /* Improved scrolling */
   .smooth-scroll {

@@ -413,7 +413,6 @@ const ConciencIAView: React.FC = () => {
     <div 
       className="flex flex-col max-w-4xl mx-auto"
       style={{
-        height: '100vh',
         height: '100dvh', // Usar dynamic viewport height si está disponible
         maxHeight: '-webkit-fill-available',
         background: 'rgba(255, 255, 255, 0.6)',

@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { useAppStore } from './stores/appStore';
 import { useResponsive } from './utils/useResponsive';
-import { useScrollDirection } from './utils/useScrollDirection';
 
 // Components
 import Navigation from './components/Navigation';
@@ -31,7 +30,6 @@ function App() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isPWA, setIsPWA] = useState(false);
   const { isMobile } = useResponsive();
-  const { scrollDirection, isScrolled } = useScrollDirection();
 
   const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
@@ -70,9 +68,6 @@ function App() {
     return <LoadingScreen key="loading" onComplete={handleLoadingComplete} />;
   }
 
-  // Header visibility logic
-  const shouldHideHeader = scrollDirection === 'down' && isScrolled;
-
   return (
     <MotionConfig
       // DESACTIVAR TODAS las animaciones en móvil
@@ -95,21 +90,17 @@ function App() {
           <div className="lg:pl-64">
             {/* Mobile/Tablet Layout */}
             <div className="lg:hidden">
-              {/* Mobile Header - Auto-hide con scroll */}
-              <div className={`fixed top-0 left-0 right-0 z-30 max-w-md mx-auto transition-transform duration-300 ${
-                shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
-              } ${isPWA ? 'pt-safe' : ''}`}>
-                <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 py-3 shadow-lg">
+              <div className={`${isPWA ? 'h-screen-safe' : 'min-h-screen'} max-w-md mx-auto bg-white/80 shadow-xl relative`}>
+                
+                {/* Fixed Header */}
+                <div className={`fixed top-0 left-0 right-0 z-30 max-w-md mx-auto bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 py-3 shadow-lg ${isPWA ? 'pt-safe' : ''}`}>
                   <div className="flex justify-center">
                     <Logo size="sm" showText={false} />
                   </div>
                 </div>
-              </div>
 
-              {/* Content Container */}
-              <div className={`${isPWA ? 'h-screen-safe' : 'min-h-screen'} max-w-md mx-auto bg-white/80 shadow-xl`}>
-                                 {/* Content with proper spacing */}
-                 <div className="mobile-scroll-container pt-16 pb-20 overflow-y-auto h-full">
+                {/* Content */}
+                <div className="pt-16 pb-20 overflow-y-auto h-full">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/explore" element={<ExploreView />} />
