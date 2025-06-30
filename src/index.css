@@ -196,17 +196,28 @@
       height: 100vh;
       height: 100dvh;
       height: -webkit-fill-available;
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
     }
     
-    /* Force navigation to bottom in PWA */
+    /* Force navigation to bottom in PWA with safe area */
     .mobile-nav-container {
+      position: fixed !important;
       bottom: 0 !important;
-      padding-bottom: env(safe-area-inset-bottom, 0);
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 50 !important;
+      background: transparent;
     }
     
-    /* Remove any conflicting padding in PWA */
+    /* Navigation bar styling in PWA */
     .mobile-navigation {
-      padding-bottom: 0 !important;
+      padding-bottom: env(safe-area-inset-bottom, 0) !important;
+      margin-bottom: 0 !important;
+    }
+    
+    /* Ensure content doesn't overlap with navigation */
+    body {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
     }
   }
   
@@ -214,14 +225,41 @@
   @media not all and (display-mode: standalone) {
     .mobile-content {
       min-height: 100vh;
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
     }
     
     .mobile-nav-container {
-      padding-bottom: 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
     }
     
     .mobile-navigation {
       padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    
+    body {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+    }
+  }
+  
+  /* iOS specific fixes */
+  @supports (-webkit-touch-callout: none) {
+    .mobile-nav-container {
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    
+    @media (display-mode: standalone) {
+      .mobile-nav-container {
+        bottom: 0 !important;
+      }
+      
+      body, #root {
+        overflow-x: hidden;
+        position: relative;
+      }
     }
   }
   
