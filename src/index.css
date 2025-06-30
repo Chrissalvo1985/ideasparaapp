@@ -186,29 +186,44 @@
       height: -webkit-fill-available;
     }
     
-    /* Force fixed elements to edges and apply safe areas correctly */
-    .fixed {
-      position: fixed !important;
+    /* Mobile header in PWA */
+    .mobile-header {
+      padding-top: env(safe-area-inset-top, 0);
     }
     
-    /* PWA navigation specific - force to bottom with safe area */
-    .pwa-bottom-safe {
+    /* Mobile content in PWA */
+    .mobile-content {
+      height: 100vh;
+      height: 100dvh;
+      height: -webkit-fill-available;
+    }
+    
+    /* Force navigation to bottom in PWA */
+    .mobile-nav-container {
       bottom: 0 !important;
-      padding-bottom: env(safe-area-inset-bottom, 0) !important;
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
     
-    /* Override mobile navigation padding in PWA */
+    /* Remove any conflicting padding in PWA */
     .mobile-navigation {
       padding-bottom: 0 !important;
     }
   }
   
-  /* Mobile navigation spacing - only for browser mode */
-  .mobile-navigation {
-    padding-bottom: env(safe-area-inset-bottom, 0);
+  /* Browser mode - normal behavior */
+  @media not all and (display-mode: standalone) {
+    .mobile-content {
+      min-height: 100vh;
+    }
+    
+    .mobile-nav-container {
+      padding-bottom: 0;
+    }
+    
+    .mobile-navigation {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
   }
-  
-
   
   /* Improved scrolling */
   .smooth-scroll {

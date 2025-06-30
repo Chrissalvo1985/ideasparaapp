@@ -28,32 +28,10 @@ function App() {
   const initializeStore = useAppStore(state => state.initializeStore);
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isPWA, setIsPWA] = useState(false);
   const { isMobile } = useResponsive();
 
   const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
-    // Detectar si está corriendo como PWA
-    const checkPWA = () => {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                          (window.navigator as any).standalone ||
-                          document.referrer.includes('android-app://');
-      setIsPWA(isStandalone);
-    };
-
-    checkPWA();
-    
-    // Listener para cambios en display mode
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    const handleChange = (e: MediaQueryListEvent) => setIsPWA(e.matches);
-    
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
   }, []);
 
   useEffect(() => {
@@ -91,7 +69,7 @@ function App() {
             {/* Mobile/Tablet Layout */}
             <div className="lg:hidden">
               {/* Fixed Header */}
-              <div className={`fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg ${isPWA ? 'pt-safe' : ''}`}>
+              <div className="mobile-header fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg">
                 <div className="max-w-md mx-auto px-6 py-3">
                   <div className="flex justify-center">
                     <Logo size="sm" showText={false} />
@@ -100,7 +78,7 @@ function App() {
               </div>
 
               {/* Content Container */}
-              <div className={`${isPWA ? 'h-screen-safe' : 'min-h-screen'} max-w-md mx-auto bg-white/80 shadow-xl`}>
+              <div className="mobile-content h-screen max-w-md mx-auto bg-white/80 shadow-xl">
                 {/* Content with proper spacing */}
                 <div className="pt-16 pb-20 overflow-y-auto h-full">
                   <Routes>
@@ -121,7 +99,7 @@ function App() {
               </div>
 
               {/* Fixed Bottom Navigation */}
-              <div className={`fixed bottom-0 left-0 right-0 z-20 ${isPWA ? 'pwa-bottom-safe' : ''}`}>
+              <div className="mobile-nav-container fixed bottom-0 left-0 right-0 z-20">
                 <div className="max-w-md mx-auto">
                   <Navigation />
                 </div>
