@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { useAppStore } from './stores/appStore';
 import { useResponsive } from './utils/useResponsive';
+import { useScrollDirection } from './utils/useScrollDirection';
 
 // Components
 import Navigation from './components/Navigation';
@@ -28,10 +29,33 @@ function App() {
   const initializeStore = useAppStore(state => state.initializeStore);
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isPWA, setIsPWA] = useState(false);
   const { isMobile } = useResponsive();
+  const { scrollDirection, isScrolled } = useScrollDirection();
 
   const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    // Detectar si está corriendo como PWA
+    const checkPWA = () => {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                          (window.navigator as any).standalone ||
+                          document.referrer.includes('android-app://');
+      setIsPWA(isStandalone);
+    };
+
+    checkPWA();
+    
+    // Listener para cambios en display mode
+    const mediaQuery = window.matchMedia('(display-mode: standalone)');
+    const handleChange = (e: MediaQueryListEvent) => setIsPWA(e.matches);
+    
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
   }, []);
 
   useEffect(() => {
@@ -45,6 +69,9 @@ function App() {
   if (isLoading) {
     return <LoadingScreen key="loading" onComplete={handleLoadingComplete} />;
   }
+
+  // Header visibility logic
+  const shouldHideHeader = scrollDirection === 'down' && isScrolled;
 
   return (
     <MotionConfig
@@ -68,36 +95,41 @@ function App() {
           <div className="lg:pl-64">
             {/* Mobile/Tablet Layout */}
             <div className="lg:hidden">
-              <div className="flex flex-col h-screen max-w-md mx-auto bg-white/80 shadow-xl">
-                {/* Mobile Header - Fixed */}
-                <div className="flex-shrink-0 bg-white/95 border-b border-gray-200 px-6 py-3 sticky top-0 z-30">
+              {/* Mobile Header - Auto-hide con scroll */}
+              <div className={`fixed top-0 left-0 right-0 z-30 max-w-md mx-auto transition-transform duration-300 ${
+                shouldHideHeader ? '-translate-y-full' : 'translate-y-0'
+              } ${isPWA ? 'pt-safe' : ''}`}>
+                <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 py-3 shadow-lg">
                   <div className="flex justify-center">
                     <Logo size="sm" showText={false} />
                   </div>
                 </div>
-                
-                {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto smooth-scroll">
-                  <div className="min-h-full">
-                    <Routes>
-                      <Route path="/" element={<HomePage />} />
-                      <Route path="/explore" element={<ExploreView />} />
-                      <Route path="/write" element={<WritingSpace />} />
-                      <Route path="/diary" element={<DiaryView />} />
-                      <Route path="/liberation" element={<LiberationMode />} />
-                      <Route path="/fanzine" element={<FanzineView />} />
-                      <Route path="/emotions" element={<EmotionExplorer />} />
-                      <Route path="/inspiration" element={<InspirationView />} />
-                      <Route path="/community" element={<CommunityView />} />
-                      <Route path="/consciencia" element={<ConciencIAView />} />
-                      <Route path="/settings" element={<SettingsView />} />
-                      <Route path="*" element={<Navigate to="/" replace />} />
-                    </Routes>
-                  </div>
+              </div>
+
+              {/* Content Container */}
+              <div className={`${isPWA ? 'h-screen-safe' : 'min-h-screen'} max-w-md mx-auto bg-white/80 shadow-xl`}>
+                                 {/* Content with proper spacing */}
+                 <div className="mobile-scroll-container pt-16 pb-20 overflow-y-auto h-full">
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/explore" element={<ExploreView />} />
+                    <Route path="/write" element={<WritingSpace />} />
+                    <Route path="/diary" element={<DiaryView />} />
+                    <Route path="/liberation" element={<LiberationMode />} />
+                    <Route path="/fanzine" element={<FanzineView />} />
+                    <Route path="/emotions" element={<EmotionExplorer />} />
+                    <Route path="/inspiration" element={<InspirationView />} />
+                    <Route path="/community" element={<CommunityView />} />
+                    <Route path="/consciencia" element={<ConciencIAView />} />
+                    <Route path="/settings" element={<SettingsView />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
                 </div>
-                
-                {/* Mobile Navigation - Only for mobile */}
-                <Navigation />
+
+                {/* Fixed Bottom Navigation */}
+                <div className={`fixed bottom-0 left-0 right-0 z-20 max-w-md mx-auto ${isPWA ? 'pb-safe' : ''}`}>
+                  <Navigation />
+                </div>
               </div>
             </div>
 

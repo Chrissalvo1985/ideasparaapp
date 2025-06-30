@@ -53,6 +53,7 @@
       /* CRITICAL: Safari/Edge compatible mobile optimizations */
       :root {
         --vh: 1vh;
+        --app-height: 100vh;
         --safe-area-inset-top: env(safe-area-inset-top, 0px);
         --safe-area-inset-right: env(safe-area-inset-right, 0px);
         --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
@@ -183,10 +184,20 @@
     </style>
     
     <script>
-      // Safari viewport height fix
+      // Safari viewport height fix with PWA detection
       function setViewportHeight() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
+        
+        // PWA mode detection and additional fixes
+        const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                     window.navigator.standalone ||
+                     document.referrer.includes('android-app://');
+        
+        if (isPWA) {
+          document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+          document.body.style.height = `${window.innerHeight}px`;
+        }
       }
       
       // Set on load and resize
@@ -195,6 +206,9 @@
       window.addEventListener('orientationchange', () => {
         setTimeout(setViewportHeight, 100);
       });
+      
+      // Listen for PWA installation
+      window.addEventListener('appinstalled', setViewportHeight);
       
       // Prevent double-tap zoom on mobile
       let lastTouchEnd = 0;
