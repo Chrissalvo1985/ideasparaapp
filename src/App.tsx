@@ -98,12 +98,8 @@ function App() {
                 </div>
               </div>
 
-              {/* Fixed Bottom Navigation */}
-              <div className="mobile-nav-container fixed bottom-0 left-0 right-0 z-20">
-                <div className="max-w-md mx-auto">
-                  <Navigation />
-                </div>
-              </div>
+              {/* Navigation Component handles its own positioning */}
+              <Navigation />
             </div>
 
             {/* Desktop Layout */}

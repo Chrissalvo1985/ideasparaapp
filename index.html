@@ -124,10 +124,20 @@
           -moz-user-select: none !important;
           -ms-user-select: none !important;
           user-select: none !important;
-          /* CRITICAL: Remove all animations/transitions */
+        }
+        
+        /* Remove animations but allow essential positioning */
+        *:not(.mobile-nav-container):not(.mobile-navigation) {
           transition: none !important;
           animation: none !important;
           transform: none !important;
+          will-change: auto !important;
+        }
+        
+        /* Allow positioning for navigation */
+        .mobile-nav-container, .mobile-navigation {
+          transition: none !important;
+          animation: none !important;
           will-change: auto !important;
         }
         
@@ -156,6 +166,22 @@
           transform: translateZ(0);
           -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
+        }
+        
+        /* Critical PWA navigation positioning */
+        @media (display-mode: standalone) {
+          .mobile-nav-container {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 9999 !important;
+            transform: none !important;
+          }
+          
+          .mobile-navigation {
+            padding-bottom: env(safe-area-inset-bottom, 0) !important;
+          }
         }
       }
       
