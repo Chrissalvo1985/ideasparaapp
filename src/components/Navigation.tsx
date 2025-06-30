@@ -65,7 +65,7 @@ const Navigation: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
                 onClick={closeMenu}
               />
               
@@ -74,7 +74,10 @@ const Navigation: React.FC = () => {
                 initial={{ opacity: 0, y: -20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                className="fixed top-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 z-50 overflow-hidden"
+                className="fixed left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 z-[9999] overflow-hidden"
+                style={{ 
+                  top: `calc(env(safe-area-inset-top, 44px) + 80px)` 
+                }}
               >
                 {/* Menu Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200/50">

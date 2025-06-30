@@ -234,6 +234,9 @@
       padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
       position: relative !important;
       overflow: hidden !important;
+      /* Remove backgrounds that create visual artifacts */
+      background: transparent !important;
+      box-shadow: none !important;
     }
     
     /* Ensure content doesn't overlap with navigation */
@@ -247,6 +250,9 @@
     .mobile-content {
       min-height: 100vh;
       padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+      /* Remove backgrounds that create visual artifacts */
+      background: transparent !important;
+      box-shadow: none !important;
     }
     
     .mobile-nav-container {
@@ -312,13 +318,20 @@
         z-index: 1000 !important;
         margin-top: 0 !important;
         padding-top: env(safe-area-inset-top, 44px) !important;
+        /* Remove any additional spacing */
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        height: auto !important;
       }
       
       .mobile-content {
         /* Content should start right after header */
-        margin-top: calc(64px + env(safe-area-inset-top, 44px)) !important;
-        height: calc(100vh - 64px - env(safe-area-inset-top, 44px) - 80px - env(safe-area-inset-bottom, 0)) !important;
+        margin-top: 0 !important;
         padding-top: 0 !important;
+        height: calc(100vh - env(safe-area-inset-top, 44px) - 80px - env(safe-area-inset-bottom, 0)) !important;
+        /* Remove any background that creates double header effect */
+        background: transparent !important;
+        box-shadow: none !important;
       }
       
       .mobile-nav-container {

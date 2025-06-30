@@ -69,7 +69,7 @@ function App() {
             {/* Mobile/Tablet Layout */}
             <div className="lg:hidden">
               {/* Fixed Header */}
-              <div className="mobile-header fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg">
+              <div className="mobile-header fixed top-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
                 <div className="max-w-md mx-auto px-6 py-3">
                   <div className="flex justify-center">
                     <Logo size="sm" showText={false} />
@@ -78,9 +78,9 @@ function App() {
               </div>
 
               {/* Content Container */}
-              <div className="mobile-content h-screen max-w-md mx-auto bg-white/80 shadow-xl">
+              <div className="mobile-content h-screen max-w-md mx-auto">
                 {/* Content with proper spacing */}
-                <div className="pt-16 pb-20 overflow-y-auto h-full">
+                <div className="pt-16 pb-20 overflow-y-auto h-full bg-gradient-to-br from-gray-50 via-slate-50 to-stone-50">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/explore" element={<ExploreView />} />
