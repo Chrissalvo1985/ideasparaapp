@@ -14,6 +14,23 @@ import {
 import { useAppStore } from '../stores/appStore';
 import { mockConcienciaService } from '../services/mockConcienciaService';
 
+// Detectar iOS
+const isIOS = () => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent);
+};
+
+// Detectar Safari
+const isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+};
+
+// Detectar iOS 18+
+const isIOS18Plus = () => {
+  if (!isIOS()) return false;
+  const match = navigator.userAgent.match(/OS (\d+)_/);
+  return match && parseInt(match[1], 10) >= 18;
+};
+
 // Componente para procesar y renderizar mensajes con referencias
 const MessageContent = React.memo<{ content: string; onNavigateToEntry: (entryId: string) => void }>(({ content, onNavigateToEntry }) => {
   const { diaryEntries, liberationSessions } = useAppStore();
@@ -92,15 +109,22 @@ const MessageContent = React.memo<{ content: string; onNavigateToEntry: (entryId
             <button
               key={index}
               onClick={() => onNavigateToEntry(part.entryId)}
-              className="inline-flex items-center mx-1 px-2 py-1 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg text-sm transition-colors border border-purple-200 group relative"
+              className="inline-flex items-center mx-1 px-2 py-1 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg text-sm transition-colors border border-purple-200 group relative touch-manipulation"
               title={entry ? `"${entryTitle || entryEmotion}" - ${new Date(entry.date).toLocaleDateString()}` : "Ver entrada referenciada"}
+              style={{ 
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation'
+              }}
             >
               <ExternalLink size={12} className="mr-1" />
               <span>{displayText}</span>
               
-              {/* Tooltip mejorado */}
+              {/* Tooltip mejorado con mejor z-index */}
               {entry && (
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none whitespace-nowrap">
+                <div 
+                  className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap"
+                  style={{ zIndex: 9999 }}
+                >
                   <div className="font-semibold">{entryTitle || entryEmotion}</div>
                   <div className="text-gray-300">{new Date(entry.date).toLocaleDateString()}</div>
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
@@ -209,6 +233,19 @@ const WelcomeMessage = React.memo<{ apiKey: string | undefined; onNavigate: () =
       </p>
     </motion.div>
 
+    {/* Advertencia específica para iOS 18 */}
+    {isIOS18Plus() && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 max-w-md mx-auto"
+      >
+        <p className="text-amber-800 text-sm">
+          <strong>⚠️ iOS 18:</strong> Si el teclado no aparece al tocar el campo de texto, intenta tocar y mantener presionado, o abre esta app en Safari normal.
+        </p>
+      </motion.div>
+    )}
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
       {[
         "¿Cómo puedo ser más creativo?",
@@ -219,9 +256,13 @@ const WelcomeMessage = React.memo<{ apiKey: string | undefined; onNavigate: () =
         <motion.button
           key={index}
           onClick={() => onSetMessage(suggestion)}
-          className="p-3 text-left bg-white border border-purple-100 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-all text-sm text-gray-700 hover:text-purple-700"
+          className="p-3 text-left bg-white border border-purple-100 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-all text-sm text-gray-700 hover:text-purple-700 touch-manipulation"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          style={{ 
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation'
+          }}
         >
           {suggestion}
         </motion.button>
@@ -262,6 +303,25 @@ const ConciencIAView: React.FC = () => {
     const timeoutId = setTimeout(scrollToBottom, 100);
     return () => clearTimeout(timeoutId);
   }, [chatMessages.length, isLoading]);
+
+  // Workaround para iOS 18 - forzar focus del teclado
+  const handleInputFocus = useCallback(() => {
+    if (isIOS18Plus() && inputRef.current) {
+      // Múltiples intentos para forzar el teclado en iOS 18
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.click();
+        }
+      }, 100);
+      
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 300);
+    }
+  }, []);
 
   // Callbacks memoizados
   const handleSendMessage = useCallback(async () => {
@@ -321,7 +381,13 @@ const ConciencIAView: React.FC = () => {
 
   const handleSetInputMessage = useCallback((message: string) => {
     setInputMessage(message);
-  }, []);
+    // Forzar focus después de establecer el mensaje en iOS 18
+    if (isIOS18Plus()) {
+      setTimeout(() => {
+        handleInputFocus();
+      }, 100);
+    }
+  }, [handleInputFocus]);
 
   const handleGoBack = useCallback(() => {
     navigate('/');
@@ -332,20 +398,50 @@ const ConciencIAView: React.FC = () => {
     navigate(`/diary?highlight=${entryId}`);
   }, [navigate]);
 
+  // Determinar el estilo de backdrop apropiado para compatibilidad Safari
+  const getBackdropStyle = () => {
+    if (isSafari() && !CSS.supports('backdrop-filter', 'blur(10px)')) {
+      // Fallback para Safari más antiguo
+      return {
+        backgroundColor: 'rgba(255, 255, 255, 0.95)'
+      };
+    }
+    return {};
+  };
+
   return (
     <div 
-      className="flex flex-col max-w-4xl mx-auto bg-white/60 backdrop-blur-sm"
+      className="flex flex-col max-w-4xl mx-auto"
       style={{
-        height: 'calc(var(--vh, 1vh) * 100)',
-        minHeight: '-webkit-fill-available'
+        height: '100vh',
+        height: '100dvh', // Usar dynamic viewport height si está disponible
+        maxHeight: '-webkit-fill-available',
+        background: 'rgba(255, 255, 255, 0.6)',
+        // Compatibilidad backdrop-filter
+        backdropFilter: CSS.supports('backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
+        WebkitBackdropFilter: CSS.supports('-webkit-backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
+        ...getBackdropStyle()
       }}
     >
       {/* Header */}
-      <div className="flex-shrink-0 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4 safe-area-top">
+      <div 
+        className="flex-shrink-0 border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: CSS.supports('backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
+          WebkitBackdropFilter: CSS.supports('-webkit-backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
+          paddingTop: `calc(12px + env(safe-area-inset-top, 0px))`,
+          ...getBackdropStyle()
+        }}
+      >
         <div className="flex items-center justify-between">
           <button
             onClick={handleGoBack}
             className="flex items-center text-gray-600 hover:text-gray-800 transition-colors touch-manipulation"
+            style={{ 
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation'
+            }}
           >
             <ArrowLeft size={20} className="mr-2" />
             <span className="font-medium">Volver</span>
@@ -364,6 +460,10 @@ const ConciencIAView: React.FC = () => {
                 onClick={clearChatHistory}
                 className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all touch-manipulation"
                 title="Limpiar conversación"
+                style={{ 
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation'
+                }}
               >
                 <Trash2 size={16} />
               </button>
@@ -376,11 +476,17 @@ const ConciencIAView: React.FC = () => {
       <div 
         className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 chat-messages-container"
         style={{
-          WebkitOverflowScrolling: 'touch',
+          // Scroll mejorado para Safari iOS
           scrollBehavior: 'smooth',
-          // Safari-specific fixes
+          WebkitOverflowScrolling: 'auto', // Cambiar de 'touch' (deprecated) a 'auto'
+          overscrollBehavior: 'contain',
+          // Hardware acceleration para Safari
           transform: 'translateZ(0)',
-          backfaceVisibility: 'hidden'
+          WebkitTransform: 'translateZ(0)',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+          // Mejorar performance en iOS
+          willChange: 'scroll-position'
         }}
       >
         {chatMessages.length === 0 ? (
@@ -429,10 +535,14 @@ const ConciencIAView: React.FC = () => {
 
       {/* Input Area */}
       <div 
-        className="flex-shrink-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4 safe-area-bottom"
+        className="flex-shrink-0 border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4"
         style={{
-          // Ensure input area is always visible above safe area on iOS
-          paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))'
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: CSS.supports('backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
+          WebkitBackdropFilter: CSS.supports('-webkit-backdrop-filter', 'blur(10px)') ? 'blur(10px)' : 'none',
+          // Safe areas mejoradas para iOS
+          paddingBottom: `calc(12px + env(safe-area-inset-bottom, 0px))`,
+          ...getBackdropStyle()
         }}
       >
         <div className="flex items-end space-x-3">
@@ -442,6 +552,8 @@ const ConciencIAView: React.FC = () => {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
+              onFocus={handleInputFocus}
+              onTouchStart={handleInputFocus} // Workaround adicional para iOS 18
               placeholder="Cuéntame qué tienes en mente..."
               disabled={isLoading}
               className="w-full resize-none rounded-2xl border border-gray-300 bg-white px-4 py-3 pr-12 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed max-h-32 min-h-[48px] text-base touch-manipulation"
@@ -449,13 +561,23 @@ const ConciencIAView: React.FC = () => {
               style={{ 
                 height: 'auto',
                 minHeight: '48px',
-                fontSize: '16px' // Prevent zoom on iOS
+                fontSize: '16px', // Prevenir zoom en iOS
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
+                // Mejorar focus en iOS 18
+                WebkitUserSelect: 'text',
+                userSelect: 'text'
               }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
                 target.style.height = 'auto';
                 target.style.height = Math.min(target.scrollHeight, 128) + 'px';
               }}
+              // Atributos adicionales para iOS 18
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="sentences"
+              spellCheck="true"
             />
           </div>
           
@@ -465,6 +587,10 @@ const ConciencIAView: React.FC = () => {
             className="flex-shrink-0 p-3 bg-gradient-to-br from-purple-600 to-violet-600 text-white rounded-xl hover:from-purple-700 hover:to-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg touch-manipulation"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            style={{ 
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation'
+            }}
           >
             {isLoading ? (
               <Loader2 size={20} className="animate-spin" />
