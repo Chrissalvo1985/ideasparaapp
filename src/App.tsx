@@ -118,7 +118,7 @@ function App() {
                 </div>
 
                 {/* Fixed Bottom Navigation */}
-                <div className={`fixed bottom-0 left-0 right-0 z-20 max-w-md mx-auto ${isPWA ? 'pb-safe' : ''}`}>
+                <div className={`fixed bottom-0 left-0 right-0 z-20 max-w-md mx-auto ${isPWA ? 'pwa-bottom-safe' : ''}`}>
                   <Navigation />
                 </div>
               </div>

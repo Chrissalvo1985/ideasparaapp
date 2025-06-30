@@ -183,10 +183,20 @@
       height: 100vh;
       height: -webkit-fill-available;
     }
+    
+    /* Ensure bottom navigation respects safe areas in PWA */
+    .pwa-bottom-safe {
+      padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    }
   }
   
   /* Mobile navigation spacing */
   .mobile-navigation {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* PWA specific navigation spacing */
+  .pwa-bottom-safe {
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
   

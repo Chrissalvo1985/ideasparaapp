@@ -121,7 +121,7 @@ const Navigation: React.FC = () => {
 
         {/* Bottom Navigation Bar */}
         <div className="mobile-navigation bg-white/95 backdrop-blur-md shadow-2xl border-t border-gray-200">
-          <div className="flex items-center justify-around p-2 pb-safe">
+          <div className="flex items-center justify-around p-2">
             {/* Main Navigation Items */}
             {mainNavItems.map((item) => {
               const Icon = item.icon;
