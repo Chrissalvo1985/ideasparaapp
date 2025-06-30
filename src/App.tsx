@@ -90,16 +90,18 @@ function App() {
           <div className="lg:pl-64">
             {/* Mobile/Tablet Layout */}
             <div className="lg:hidden">
-              <div className={`${isPWA ? 'h-screen-safe' : 'min-h-screen'} max-w-md mx-auto bg-white/80 shadow-xl relative`}>
-                
-                {/* Fixed Header */}
-                <div className={`fixed top-0 left-0 right-0 z-30 max-w-md mx-auto bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 py-3 shadow-lg ${isPWA ? 'pt-safe' : ''}`}>
+              {/* Fixed Header */}
+              <div className={`fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg ${isPWA ? 'pt-safe' : ''}`}>
+                <div className="max-w-md mx-auto px-6 py-3">
                   <div className="flex justify-center">
                     <Logo size="sm" showText={false} />
                   </div>
                 </div>
+              </div>
 
-                {/* Content */}
+              {/* Content Container */}
+              <div className={`${isPWA ? 'h-screen-safe' : 'min-h-screen'} max-w-md mx-auto bg-white/80 shadow-xl`}>
+                {/* Content with proper spacing */}
                 <div className="pt-16 pb-20 overflow-y-auto h-full">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
@@ -116,9 +118,11 @@ function App() {
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </div>
+              </div>
 
-                {/* Fixed Bottom Navigation */}
-                <div className={`fixed bottom-0 left-0 right-0 z-20 max-w-md mx-auto ${isPWA ? 'pwa-bottom-safe' : ''}`}>
+              {/* Fixed Bottom Navigation */}
+              <div className={`fixed bottom-0 left-0 right-0 z-20 ${isPWA ? 'pwa-bottom-safe' : ''}`}>
+                <div className="max-w-md mx-auto">
                   <Navigation />
                 </div>
               </div>

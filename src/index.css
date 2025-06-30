@@ -173,7 +173,7 @@
   
   /* PWA specific optimizations */
   @media (display-mode: standalone) {
-    body {
+    html, body {
       height: 100vh;
       height: -webkit-fill-available;
       overflow: hidden;
@@ -187,6 +187,11 @@
     /* Ensure bottom navigation respects safe areas in PWA */
     .pwa-bottom-safe {
       padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    }
+    
+    /* Force fixed elements to stick to viewport edges in PWA */
+    .fixed {
+      position: fixed !important;
     }
   }
   
