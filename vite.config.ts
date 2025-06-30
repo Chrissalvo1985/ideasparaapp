@@ -8,8 +8,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['logo.jpeg', 'vite.svg', '*.png'],
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpeg,jpg}'],
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com/,
@@ -29,7 +32,21 @@ export default defineConfig({
               },
             },
           },
+          {
+            urlPattern: /^https:\/\/api\.openai\.com/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'openai-api',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 1 día
+              },
+            },
+          },
         ],
+      },
+      devOptions: {
+        enabled: true
       },
       manifest: {
         name: 'Ideas para App',
@@ -38,7 +55,7 @@ export default defineConfig({
         theme_color: '#475569',
         background_color: '#f8fafc',
         display: 'standalone',
-        orientation: 'portrait',
+        orientation: 'portrait-primary',
         scope: '/',
         start_url: '/',
         icons: [
@@ -46,19 +63,37 @@ export default defineConfig({
             src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any'
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any'
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable',
+            purpose: 'maskable'
           },
         ],
+        shortcuts: [
+          {
+            name: 'Nueva Entrada',
+            short_name: 'Escribir',
+            description: 'Crear una nueva entrada en el diario',
+            url: '/diary',
+            icons: [{ src: 'apple-touch-icon-76x76.png', sizes: '76x76' }]
+          },
+          {
+            name: 'ConciencIA',
+            short_name: 'Chat IA',
+            description: 'Hablar con ConciencIA',
+            url: '/consciencia',
+            icons: [{ src: 'apple-touch-icon-76x76.png', sizes: '76x76' }]
+          }
+        ]
       },
     }),
   ],

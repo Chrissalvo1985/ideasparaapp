@@ -333,13 +333,19 @@ const ConciencIAView: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-white/60 backdrop-blur-sm">
+    <div 
+      className="flex flex-col max-w-4xl mx-auto bg-white/60 backdrop-blur-sm"
+      style={{
+        height: 'calc(var(--vh, 1vh) * 100)',
+        minHeight: '-webkit-fill-available'
+      }}
+    >
       {/* Header */}
-      <div className="flex-shrink-0 bg-white/95 backdrop-blur-md border-b border-gray-200 px-6 py-4">
+      <div className="flex-shrink-0 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 lg:px-6 py-3 lg:py-4 safe-area-top">
         <div className="flex items-center justify-between">
           <button
             onClick={handleGoBack}
-            className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+            className="flex items-center text-gray-600 hover:text-gray-800 transition-colors touch-manipulation"
           >
             <ArrowLeft size={20} className="mr-2" />
             <span className="font-medium">Volver</span>
@@ -356,7 +362,7 @@ const ConciencIAView: React.FC = () => {
             {chatMessages.length > 0 && (
               <button
                 onClick={clearChatHistory}
-                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all touch-manipulation"
                 title="Limpiar conversación"
               >
                 <Trash2 size={16} />
@@ -370,12 +376,15 @@ const ConciencIAView: React.FC = () => {
       <div 
         className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 chat-messages-container"
         style={{
+          WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'touch'
+          // Safari-specific fixes
+          transform: 'translateZ(0)',
+          backfaceVisibility: 'hidden'
         }}
       >
         {chatMessages.length === 0 ? (
-          <div className="h-full flex items-center justify-center px-6 py-4">
+          <div className="h-full flex items-center justify-center px-4 lg:px-6 py-4">
             <WelcomeMessage 
               apiKey="demo"
               onNavigate={handleNavigateToSettings}
@@ -383,7 +392,7 @@ const ConciencIAView: React.FC = () => {
             />
           </div>
         ) : (
-          <div className="px-6 py-4">
+          <div className="px-4 lg:px-6 py-4">
             <div className="space-y-4">
               <AnimatePresence>
                 {chatMessages.map((message, index) => (
@@ -419,7 +428,13 @@ const ConciencIAView: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="flex-shrink-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-6 py-4">
+      <div 
+        className="flex-shrink-0 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 lg:px-6 py-3 lg:py-4 safe-area-bottom"
+        style={{
+          // Ensure input area is always visible above safe area on iOS
+          paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))'
+        }}
+      >
         <div className="flex items-end space-x-3">
           <div className="flex-1 relative">
             <textarea
@@ -429,11 +444,12 @@ const ConciencIAView: React.FC = () => {
               onKeyPress={handleKeyPress}
               placeholder="Cuéntame qué tienes en mente..."
               disabled={isLoading}
-              className="w-full resize-none rounded-2xl border border-gray-300 bg-white px-4 py-3 pr-12 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed max-h-32 min-h-[48px]"
+              className="w-full resize-none rounded-2xl border border-gray-300 bg-white px-4 py-3 pr-12 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed max-h-32 min-h-[48px] text-base touch-manipulation"
               rows={1}
               style={{ 
                 height: 'auto',
-                minHeight: '48px'
+                minHeight: '48px',
+                fontSize: '16px' // Prevent zoom on iOS
               }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
@@ -446,7 +462,7 @@ const ConciencIAView: React.FC = () => {
           <motion.button
             onClick={handleSendMessage}
             disabled={!inputMessage.trim() || isLoading}
-            className="flex-shrink-0 p-3 bg-gradient-to-br from-purple-600 to-violet-600 text-white rounded-xl hover:from-purple-700 hover:to-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg"
+            className="flex-shrink-0 p-3 bg-gradient-to-br from-purple-600 to-violet-600 text-white rounded-xl hover:from-purple-700 hover:to-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg touch-manipulation"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
