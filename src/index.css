@@ -173,17 +173,30 @@
   
   /* PWA specific optimizations */
   @media (display-mode: standalone) {
-    html, body {
+    html {
       height: 100vh;
       height: 100dvh;
       height: -webkit-fill-available;
       overflow: hidden;
+      padding-top: env(safe-area-inset-top, 0) !important;
+      box-sizing: border-box !important;
+    }
+    
+    body {
+      height: calc(100vh - env(safe-area-inset-top, 0));
+      height: calc(100dvh - env(safe-area-inset-top, 0));
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      overflow: hidden;
+      position: relative !important;
     }
     
     #root {
-      height: 100vh;
-      height: 100dvh;
-      height: -webkit-fill-available;
+      height: 100%;
+      width: 100%;
+      position: relative !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
     }
     
     /* CRITICAL: PWA Navigation positioning - HIGHEST priority */
@@ -205,17 +218,22 @@
       padding-bottom: 0 !important;
     }
     
-    /* Mobile header in PWA */
+    /* Mobile header in PWA - CRITICAL */
     .mobile-header {
-      padding-top: env(safe-area-inset-top, 0);
+      padding-top: env(safe-area-inset-top, 0) !important;
+      margin-top: 0 !important;
+      top: 0 !important;
     }
     
-    /* Mobile content in PWA */
+    /* Mobile content in PWA - CRITICAL positioning */
     .mobile-content {
-      height: 100vh;
-      height: 100dvh;
-      height: -webkit-fill-available;
-      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+      height: calc(100vh - env(safe-area-inset-top, 0)) !important;
+      height: calc(100dvh - env(safe-area-inset-top, 0)) !important;
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)) !important;
+      position: relative !important;
+      overflow: hidden !important;
     }
     
     /* Ensure content doesn't overlap with navigation */
@@ -265,6 +283,44 @@
   /* CRITICAL: iPhone PWA specific fixes */
   @supports (-webkit-touch-callout: none) {
     @media (display-mode: standalone) {
+      /* Force proper safe area handling on iPhone */
+      html {
+        padding-top: env(safe-area-inset-top, 44px) !important;
+      }
+      
+      body {
+        height: calc(100vh - env(safe-area-inset-top, 44px)) !important;
+        height: calc(100dvh - env(safe-area-inset-top, 44px)) !important;
+        position: relative !important;
+        top: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
+      #root {
+        position: relative !important;
+        top: 0 !important;
+        height: 100% !important;
+      }
+      
+      .mobile-header {
+        /* Header should be at the very top of available space */
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+        margin-top: 0 !important;
+        padding-top: env(safe-area-inset-top, 44px) !important;
+      }
+      
+      .mobile-content {
+        /* Content should start right after header */
+        margin-top: calc(64px + env(safe-area-inset-top, 44px)) !important;
+        height: calc(100vh - 64px - env(safe-area-inset-top, 44px) - 80px - env(safe-area-inset-bottom, 0)) !important;
+        padding-top: 0 !important;
+      }
+      
       .mobile-nav-container {
         /* Force absolute bottom positioning on iPhone PWA */
         position: fixed !important;

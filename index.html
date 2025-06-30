@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon-32x32.png" />
-    <!-- Viewport optimizado para Safari/Edge compatibility -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Viewport optimizado para Safari/Edge compatibility y PWA safe areas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#475569" />
@@ -168,16 +168,34 @@
           backface-visibility: hidden;
         }
         
-        /* PWA viewport fixes only */
+        /* PWA viewport and safe area fixes */
         @media (display-mode: standalone) {
-          html, body {
+          html {
             height: 100vh !important;
             height: 100dvh !important;
+            padding-top: env(safe-area-inset-top, 0) !important;
+            box-sizing: border-box !important;
+          }
+          
+          body {
+            height: calc(100vh - env(safe-area-inset-top, 0)) !important;
+            height: calc(100dvh - env(safe-area-inset-top, 0)) !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative !important;
           }
           
           #root {
-            height: 100vh !important;
-            height: 100dvh !important;
+            height: 100% !important;
+            width: 100% !important;
+            position: relative !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          
+          /* Prevent content from going under status bar */
+          .mobile-header {
+            padding-top: env(safe-area-inset-top, 44px) !important;
           }
         }
       }
